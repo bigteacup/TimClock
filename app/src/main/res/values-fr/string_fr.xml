@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TimClock</string>
+    <string name="action_settings">Settings</string>
+    <string name="current_date">janvier 2019</string>
+    <string name="add_event">ADD CALENDAR EVENT</string>
+    <string name="lun">LUN</string>
+    <string name="mar">MAR</string>
+    <string name="mer">MER</string>
+    <string name="jeu">JEU</string>
+    <string name="ven">VEN</string>
+    <string name="sam">SAM</string>
+    <string name="dim">DIM</string>
+    <string name="last_date">30</string>
+</resources>
