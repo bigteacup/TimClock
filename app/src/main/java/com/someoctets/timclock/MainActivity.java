@@ -3,10 +3,12 @@ package com.someoctets.timclock;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    public SharedPreferences sharedPreferences;
     public Outils outils = Outils.getInstanceOutils();
     //public CalendarView cal;
     private EnregistrementDataSource datasource = new EnregistrementDataSource(this);
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     boolean editMode = false;
     FloatingActionButton fab;
     boolean fabOrange = false;
+    boolean selectAllParDefaut ;
+    boolean utiliserValeurParDefaut ;
 
     ArrayList<Enregistrement> values = new ArrayList<Enregistrement>();
 
@@ -90,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
         caltimF.setMain(this);
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        outils.setSharedPreferences(sharedPreferences);
 
         Calendar firstDate = Calendar.getInstance();
         for (CaseJour f : caltim.getmAdapter().monthlyCases) {
@@ -242,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
 
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+
 
        entree.requestFocus();
         entree.selectAll();
@@ -790,6 +796,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
                 }
+                // setSelectAllParDefaut(outils.loadBoolean("selectionnerToutParDefaut", true));
+                setUtiliserValeurParDefaut(outils.loadBoolean("utiliserValeurParDefaut", false));
             } else {
                 fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
                 pause.setTextColor(Color.GRAY);
@@ -907,7 +915,14 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    public void setSharedPreferences(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+    }
+    public  SharedPreferences getSharedPreferences(){
+        return sharedPreferences;
 
+
+    }
 
 
     public void setUtiliserValeurParDefaut(boolean trueOrFalse){

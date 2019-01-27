@@ -137,6 +137,7 @@ public class GridAdapter extends ArrayAdapter {
            // view.setBackgroundResource(R.drawable.roundedborder);
             view.setBackgroundResource(R.drawable.rounded);
             setBack(view, R.color.timBleu );
+
 /*
             if (displayMonth == currentMonth) {
                 view.setBackgroundColor(Color.parseColor("white"));

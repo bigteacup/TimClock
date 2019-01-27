@@ -12,4 +12,12 @@
     <string name="sam">SAM</string>
     <string name="dim">DIM</string>
     <string name="last_date">30</string>
+    <string name="heurein">Heure d\'entrée</string>
+    <string name="heureout">Heure de sortie</string>
+    <string name="pause">Pause</string>
+    <string name="usedefault">Utiliser les réglages par defaut</string>
+    <string name="totalmois">Total Mois :</string>
+    <string name="selectall">Selectionner tout par défaut</string>
+    <string name="sm">SAM</string>
+    <string name="dm">DIM</string>
 </resources>

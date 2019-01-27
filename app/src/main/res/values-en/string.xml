@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TimClock</string>
+    <string name="action_settings">Settings</string>
+    <string name="current_date">January 2019</string>
+    <string name="add_event">ADD CALENDAR EVENT</string>
+    <string name="lun">MON</string>
+    <string name="mar">TUE</string>
+    <string name="mer">THU</string>
+    <string name="jeu">FRI</string>
+    <string name="ven">WED</string>
+    <string name="sam">SAT</string>
+    <string name="dim">SUN</string>
+    <string name="last_date">30</string>
+    <string name="heurein">Start</string>
+    <string name="heureout">End</string>
+    <string name="pause">Break</string>
+    <string name="usedefault">Use default values</string>
+    <string name="totalmois">Month\'s total :</string>
+    <string name="selectall">Select all by default</string>
+    <string name="sm">SAM</string>
+    <string name="dm">DIM</string>
+</resources>

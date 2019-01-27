@@ -9,18 +9,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingBottom="20dp"
+        android:enabled="false"
         android:paddingTop="20dp"
-        android:text="selectionnerTout" />
+        android:paddingBottom="20dp"
+        android:text="@string/selectall" />
 
     <Switch
         android:id="@+id/utiliserValeurParDefaut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingBottom="10dp"
         android:paddingTop="20dp"
-        android:text="valeursDefauts" />
+        android:paddingBottom="10dp"
+        android:text="@string/usedefault" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -31,7 +32,7 @@
             android:id="@+id/defautHeureEntree"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Heure d'entrée"
+            android:hint="@string/heurein"
             android:inputType="number|numberDecimal" />
 
     </android.support.design.widget.TextInputLayout>
@@ -45,7 +46,7 @@
             android:id="@+id/defautHeureSortie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Heure de sortie"
+            android:hint="@string/heureout"
             android:inputType="number|numberDecimal" />
     </android.support.design.widget.TextInputLayout>
 
@@ -58,7 +59,7 @@
             android:id="@+id/defautPause"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="pause"
+            android:hint="@string/pause"
             android:inputType="number|numberDecimal" />
     </android.support.design.widget.TextInputLayout>
 
