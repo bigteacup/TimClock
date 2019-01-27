@@ -2,10 +2,12 @@ package com.someoctets.timclock;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
@@ -18,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -130,6 +133,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        final Button optionsButton  = (Button) findViewById(R.id.boutonOption);
+        optionsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Options.class);
+                startActivity(intent);
+
+
+
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -245,16 +260,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        try {
-            this.finishAffinity();
-        } catch (Exception e) {
-        }
-        this.finish();
-        System.exit(0);
-    }
 
 
     public boolean check(String a) {
@@ -905,6 +910,36 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    public void setUtiliserValeurParDefaut(boolean trueOrFalse){
+        if(trueOrFalse == true) {
+            entree = findViewById(R.id.entree);
+            sortie = findViewById(R.id.sortie);
+            pause = findViewById(R.id.pause);
+
+
+            if(outils.loadString("defautHeureEntree", "").length() > 0){
+                entree.setText(outils.loadString("defautHeureEntree", ""));
+            }
+            if(outils.loadString("defautHeureSortie", "").length() > 0){
+                sortie.setText(outils.loadString("defautHeureSortie", ""));
+            }
+            if(outils.loadString("defautPause", "").length() > 0){
+                pause.setText(outils.loadString("defautPause", ""));
+            }
+
+  /*
+  nombreDePalettes.setText(outils.loadString("defautNombrePalettes",""));
+    poidPalet.setText(outils.loadString("defautTarePalette",""));
+    tareColis.setText(outils.loadString("defautTareColis",""));
+    */
+            //   nombreDePalettes.setText("1");
+
+            //  poidPalet.setText("25");
+            //   tareColis.setText("0.6");
+        }
+
+
+    }
 
 
 
