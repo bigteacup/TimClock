@@ -25,13 +25,13 @@ public class Enregistrement {
 
         // sdf.setLenient(true);
         Date dateb = null;
-            try {
-                String b = this.date.replace("'","");
-              dateb  = sdf.parse(b);
+        try {
+            String b = this.date.replace("'", "");
+            dateb = sdf.parse(b);
 
             String fg = "ddd";
-            } catch (Exception e) {
-            }
+        } catch (Exception e) {
+        }
         return dateb;
     }
 
@@ -66,8 +66,6 @@ public class Enregistrement {
     }
 
 
-
-
     public long getId() {
         return id;
     }
@@ -85,8 +83,8 @@ public class Enregistrement {
     }
 
     // Sera utilisée par ArrayAdapter dans la ListView
-@Override
-  public String toString() {
-       return date;
-  }
+    @Override
+    public String toString() {
+        return date;
+    }
 }

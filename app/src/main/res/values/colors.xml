@@ -5,4 +5,11 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
+    <color name="bleuciel">#33B5E5</color>
+    <color name="timWhite">#ffffff</color>
+    <color name="timBleu">#49CAF5</color>
+    <color name="timBleuClair">#afebff</color>
+    <color name="timGrisA">#cccccc</color>
+    <color name="timGrisB">#efedee</color>
+
 </resources>

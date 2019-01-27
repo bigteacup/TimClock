@@ -1,9 +1,6 @@
 package com.someoctets.timclock;
 
 
-
-
-
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -16,8 +13,6 @@ import android.util.Log;
 public class EnregistrementDataSource {
 
 
-
-
     public SQLiteDatabase getDatabase() {
 
         return database;
@@ -26,7 +21,7 @@ public class EnregistrementDataSource {
     // Champs de la base de données
     private SQLiteDatabase database;
     private DBOpenHelper dbHelper;
-    private String[] allColumns = { DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE };
+    private String[] allColumns = {DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE};
 
     public EnregistrementDataSource(Context context) {
 
@@ -35,18 +30,9 @@ public class EnregistrementDataSource {
     }
 
 
-
-
-
-
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
-
-
-
-
-
 
 
     public void close() {
@@ -56,9 +42,7 @@ public class EnregistrementDataSource {
     }
 
 
-
-
-    public Enregistrement createEnregistrement(String keyDate, long keyIn, long keyOut, long keyPause ) {
+    public Enregistrement createEnregistrement(String keyDate, long keyIn, long keyOut, long keyPause) {
 
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.COLUMN_DATE, keyDate);
@@ -72,21 +56,21 @@ public class EnregistrementDataSource {
         cursor.close();
         Log.i("debug", "ZZZZZZZZZZZZZZZZZZ: ");
         return newEnregistrement;
-}
+    }
 
 
-    public Enregistrement lireEnregistrement(String keyDate ) {
+    public Enregistrement lireEnregistrement(String keyDate) {
 
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.COLUMN_DATE, keyDate);
-                Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null,null, null, null, null);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         Enregistrement enr = null;
         while (!cursor.isAfterLast()) {
             if (cursor.getString(1).equals(keyDate)) {
                 enr = cursorToEnregistrement(cursor);
 
-            //    Log.i("debug", "trouve : ");
+                //    Log.i("debug", "trouve : ");
                 cursor.moveToNext();
                 break;
             } else {
@@ -95,13 +79,12 @@ public class EnregistrementDataSource {
         }
         cursor.close();
 
-    return enr ;
+        return enr;
 
     }
 
 
-
-        public void deleteEnregistrement(Enregistrement date) {
+    public void deleteEnregistrement(Enregistrement date) {
         long id = date.getId();
         System.out.println("Enregistrement deleted with id: " + id);
 
@@ -110,23 +93,14 @@ public class EnregistrementDataSource {
     }
 
 
-
-
-
-
-
-
-
-
-
     public ArrayList<Enregistrement> getAllEnregistrements() {
         ArrayList<Enregistrement> dates = new ArrayList<Enregistrement>();
         open();
         database.isReadOnly();
 
 
-      //  try {
-            Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null, null, null, null, null);
+        //  try {
+        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -136,20 +110,11 @@ public class EnregistrementDataSource {
         }
         // assurez-vous de la fermeture du curseur
         cursor.close();
-     //   }catch (Exception e){
+        //   }catch (Exception e){
 
-     //   }
+        //   }
         return dates;
     }
-
-
-
-
-
-
-
-
-
 
 
     private Enregistrement cursorToEnregistrement(Cursor cursor) {
