@@ -191,13 +191,13 @@ public class GridAdapter extends ArrayAdapter {
                 //Drawable mDrawable = enrIndicator.getContext().getResources().getDrawable(R.drawable.roundedborder);
             //    mDrawable.setColorFilter(new ColorFilter(Color.GREEN));
 
-
+/*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     main.fab.setImageDrawable(main.getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, main.fab.getContext().getTheme()));
                 } else {
                     main.fab.setImageDrawable(main.getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
                 }
-
+*/
                 try {
                     enrIndicator.setText(String.valueOf(main.dureeJour(listeEnregistrements.get(i))));
                 } catch (Exception e) {

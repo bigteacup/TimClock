@@ -157,13 +157,55 @@ public class CalendarTim extends LinearLayout {
         }
 
 */
+public void majSelectedCase(CaseJour cs) {
+
+
+
+            // main.entree.setEnabled(true);
+            // main.sortie.setEnabled(true);
+            //  main.pause.setEnabled(true);
+            main.entree.getText().clear();
+            main.sortie.getText().clear();
+            main.pause.getText().clear();
+            //     main.fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#49CAF5")));
+            //     main.setFabLocked(false);
+            //   main.editMode = false;
+
+            mAdapter.oldCase = main.selectedCase;
+            //CaseJour cs = (CaseJour) mAdapter.getItem(mAdapter.getPosition(mAdapter.oldCase));
+            main.selectedCase = cs;
+
+
+            try {
+                majCase(mAdapter.getPosition(mAdapter.oldCase));
+
+
+            } catch (Exception e) {
+
+            }
+
+          //  mAdapter.getView(position, view, parent);
+            //    main.editMode = false;
+             majCase(mAdapter.getPosition(cs));
+            main.setSelectedDayInt(main.selectedCase.getDateCase());
+
+
+
+
+            main.entree.requestFocus();
+            InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(main.entree, InputMethodManager.SHOW_IMPLICIT);
+            main.resetFab();
+            main.affichageFabLock();
+            main.entree.selectAll();
+
+}
 
 
 
 
 
-
-    private void setUpCalendarAdapter() {
+    public void setUpCalendarAdapter() {
 
 
         ArrayList<CaseJour> caseJoursList = new ArrayList<CaseJour>();

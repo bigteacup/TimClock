@@ -16,6 +16,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
@@ -96,14 +97,17 @@ public class MainActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         outils.setSharedPreferences(sharedPreferences);
-
         Calendar firstDate = Calendar.getInstance();
-        for (CaseJour f : caltim.getmAdapter().monthlyCases) {
+        Calendar todate = Calendar.getInstance();
 
-            if (firstDate.get(Calendar.DAY_OF_MONTH) == f.jour) {
+        for (CaseJour f : caltim.getmAdapter().monthlyCases) {
+            todate.setTime(f.getDateCase());
+
+
+            if (firstDate.get(Calendar.DAY_OF_MONTH) == f.jour && firstDate.get(Calendar.MONTH) == todate.get(Calendar.MONTH)) {
                 selectedCase = f;
 
-
+/*
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fab.getContext().getTheme()));
                 } else {
@@ -134,9 +138,10 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                }
+                }*/
             }
         }
+
 
         final Button optionsButton  = (Button) findViewById(R.id.boutonOption);
         optionsButton.setOnClickListener(new View.OnClickListener() {
@@ -178,16 +183,22 @@ public class MainActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int st, int c, int a) {
 
             }
-
+            boolean ignoreChange = false;
             @Override
             public void afterTextChanged(Editable s) {
+
                 try {
                     if (check(s.toString())) {
-                        entree.setText("0");
+                       entree.setText("0");
+                        entree.selectAll();
                     }
                 } catch (Exception e) {
 
                 }
+
+
+
+
             }
         });
 
@@ -209,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     if (check(s.toString())) {
-                        sortie.setText("0000");
+                        sortie.setText("0");
+                        sortie.selectAll();
                     }
                 } catch (Exception e) {
 
@@ -235,7 +247,8 @@ public class MainActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 try {
                     if (check(s.toString())) {
-                        pause.setText("0000");
+                        pause.setText("0");
+                        pause.selectAll();
                     }
                 } catch (Exception e) {
 
@@ -261,11 +274,40 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        // put your code here...
+        try {
+            CaseJour cs = null;
+            Calendar pauseDate = Calendar.getInstance();
+            Calendar pauseTodate = Calendar.getInstance();
+
+            for (CaseJour f : caltim.getmAdapter().monthlyCases) {
+                pauseTodate.setTime(f.getDateCase());
+
+
+                if (pauseDate.get(Calendar.DAY_OF_MONTH) == f.jour && pauseDate.get(Calendar.MONTH) == pauseTodate.get(Calendar.MONTH)) {
+                    cs = f;
+                }
+            }
+            //caltim.setUpCalendarAdapter();
+            caltim.majSelectedCase(cs);
+        }catch (Exception e){
+
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
 
     }
 
-
+     /*   try {
+            this.finishAffinity();
+        } catch (Exception e) {
+        }
+        this.finish();
+        System.exit(0);
+        */
 
 
     public boolean check(String a) {
@@ -288,6 +330,102 @@ public class MainActivity extends AppCompatActivity {
         }
         return a;
     }
+
+
+
+
+
+
+
+
+    /*
+                    String sString = s.toString().replace("h","");
+
+                    if (ignoreChange == true)      {
+                        ignoreChange = false;
+                        return;
+                    }
+
+                        if( sString.length() == 0) {
+                            ignoreChange = true;
+                            String text = "0" + "<font color='gray'><i>h</i></font>" + "00" ;
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
+                            } else {
+                                entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+                            }
+                            int pos = entree.getText().length();
+                            entree.setSelection(pos);
+                            ignoreChange = false;
+                        }
+                if( sString.length() == 1) {
+                    ignoreChange = true;
+                    String text = "0" + sString + "<font color='gray'><i>h</i></font>" + "00"  ;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
+                    } else {
+                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+                    }
+                    int pos = entree.getText().length();
+                    entree.setSelection(pos-sString.length());
+                    ignoreChange = false;
+                }
+                if( sString.length() == 2) {
+                    ignoreChange = true;
+                    String text =  sString + "<font color='gray'><i>h</i></font>" + "00" ;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
+                    } else {
+                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+                    }
+                    int pos = entree.getText().length();
+                    entree.setSelection(pos-sString.length());
+                    ignoreChange = false;
+                }
+                if( sString.length() == 3) {
+                    ignoreChange = true;
+                    String text = sString.substring(0,0) + "<font color='gray'><i>h</i></font>" + sString.substring(1,2) ;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
+                    } else {
+                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+                    }
+                    int pos = entree.getText().length();
+                    entree.setSelection(pos-sString.length());
+                    ignoreChange = false;
+                }
+                if( sString.length() == 4) {
+                    ignoreChange = true;
+                    String text = sString.substring(0,1) + "<font color='gray'><i>h</i></font>" + sString.substring(2,4) ;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
+                    } else {
+                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
+                    }
+                    int pos = entree.getText().length();
+                    entree.setSelection(pos-sString.length());
+                    ignoreChange = false;
+                }
+
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public long[] calculer(long entreeD, long sortieD, long pauseD, boolean useDbData) {
@@ -696,7 +834,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            strTotal2.setText(Long.toString((totalMois / 60 / 1000 / 60)) + " H " + Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60)));
+            String minutesString = "";
+            if (((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60) < 10){
+            minutesString = "0"  + Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
+            }else {
+                minutesString = Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
+            }
+            strTotal2.setText(Long.toString((totalMois / 60 / 1000 / 60)) + " H " +  minutesString);
         } catch (Exception e) {
 
         }
@@ -840,7 +984,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (lockFab == true && fabOrange == false && editMode == false ) { // && editMode == true && fabOrange == false
 
-
+                //fabOrange = false;
+                 editMode = true;
                 fabOrange = true;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp, fab.getContext().getTheme()));
@@ -848,11 +993,19 @@ public class MainActivity extends AppCompatActivity {
                     fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp));
                 }
                 fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F57449"))); //F57449
-                pause.setTextColor(Color.GRAY);
-                entree.setTextColor(Color.GRAY);
-                sortie.setTextColor(Color.GRAY);
+                pause.setTextColor(Color.BLACK);
+                entree.setTextColor(Color.BLACK);
+                sortie.setTextColor(Color.BLACK);
 
-            }else if(fabOrange == true && lockFab == true && editMode == false ) {
+
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+            entree.requestFocus();
+            entree.selectAll();
+
+
+            }
+            /*else if(fabOrange == true && lockFab == true && editMode == false ) {
                 fabOrange = false;
                 editMode = true;
                 pause.setTextColor(Color.BLACK);
@@ -872,22 +1025,38 @@ public class MainActivity extends AppCompatActivity {
                 entree.selectAll();
 
 
-            }else if (editMode == true && lockFab == true ) {
-
+            }
+            */else if (editMode == true && lockFab == true && fabOrange == true ) {
+                 fabOrange = false;
                 fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
                 if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
                     majJour(selectedYear, selectedMonth, selectedDay);
                     editMode = false;
                 }
-                pause.setTextColor(Color.GRAY);
-                entree.setTextColor(Color.GRAY);
-                sortie.setTextColor(Color.GRAY);
+                if(lireJour(selectedYear, selectedMonth, selectedDay) != null) {
+                    pause.setTextColor(Color.GRAY);
+                    entree.setTextColor(Color.GRAY);
+                    sortie.setTextColor(Color.GRAY);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
+                    } else {
+                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
+                    }
+                }else {
+                    fabOrange = false;
+
+                    pause.getText().clear();
+                    entree.getText().clear();
+                    sortie.getText().clear();
+                    affichageFabLock();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+                    entree.requestFocus();
+                    entree.selectAll();
+
                 }
+
 
 
             }else if (lockFab== false){
