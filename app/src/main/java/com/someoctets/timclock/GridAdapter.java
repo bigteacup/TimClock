@@ -56,9 +56,11 @@ public class GridAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Calendar selDayCal = Calendar.getInstance();
-        Date a = main.selectedCase.getDateCase();
-        main.setSelectedDayInt(main.selectedCase.getDateCase());
-        selDayCal.setTime((Date) a);
+       try {//bug du 01 09 2019 correction car null pointer du au 1er un sunday non affiche a lecran
+            Date a = main.selectedCase.getDateCase();
+            main.setSelectedDayInt(main.selectedCase.getDateCase());
+            selDayCal.setTime((Date) a);
+        }catch(Exception e){}
 
         //Date  mDate =  monthlyDates.get(position);
         Date mDate = monthlyCases.get(position).getDateCase();
