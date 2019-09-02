@@ -186,9 +186,14 @@ public void majSelectedCase(CaseJour cs) {
 
           //  mAdapter.getView(position, view, parent);
             //    main.editMode = false;
+    try {
              majCase(mAdapter.getPosition(cs));
-            main.setSelectedDayInt(main.selectedCase.getDateCase());
+} catch (Exception e) {
 
+    }
+   try {
+            main.setSelectedDayInt(main.selectedCase.getDateCase());
+       } catch (Exception e) { }
 
 
 
