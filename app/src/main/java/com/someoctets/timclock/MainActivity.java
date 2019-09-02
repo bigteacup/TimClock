@@ -288,9 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             //caltim.setUpCalendarAdapter();
-            try {
             caltim.majSelectedCase(cs);
-          } catch (Exception e) {}
         }catch (Exception e){
 
         }
