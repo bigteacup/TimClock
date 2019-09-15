@@ -60,12 +60,14 @@ public class GridAdapter extends ArrayAdapter {
             Date a = main.selectedCase.getDateCase();
             main.setSelectedDayInt(main.selectedCase.getDateCase());
             selDayCal.setTime((Date) a);
-        }catch(Exception e){}
+       }catch(Exception e){}
 
         //Date  mDate =  monthlyDates.get(position);
         Date mDate = monthlyCases.get(position).getDateCase();
+
         dateCal = Calendar.getInstance();
         dateCal.setTime(mDate);
+
         int dayValue = dateCal.get(Calendar.DAY_OF_MONTH);
         displayMonth = dateCal.get(Calendar.MONTH);
         displayYear = dateCal.get(Calendar.YEAR);

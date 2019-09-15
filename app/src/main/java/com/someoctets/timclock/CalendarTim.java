@@ -258,8 +258,11 @@ public void majSelectedCase(CaseJour cs) {
 
 
     public void majCase(int selectedDay) {
-        mAdapter.getView((selectedDay), calendarGridView.getChildAt(selectedDay), calendarGridView);
+        try {//bug du 01 09 2019 correction car null pointer du au 1er un sunday non affiche a lecran
+            mAdapter.getView((selectedDay), calendarGridView.getChildAt(selectedDay), calendarGridView);
+        }catch(Exception e){
 
+        }
     }
 
 //                              mAdapter.getView(position, view, parent);
