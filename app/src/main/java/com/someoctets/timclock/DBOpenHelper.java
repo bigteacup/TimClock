@@ -3,8 +3,13 @@ package com.someoctets.timclock;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.FileUtils;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 
 public class DBOpenHelper extends SQLiteOpenHelper {
@@ -18,6 +23,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "timclockdate.db";
     private static final int DATABASE_VERSION = 1;
+
+
 
     // Commande sql pour la création de la base de données
     private static final String DATABASE_CREATE = "create table "
@@ -48,6 +55,27 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     }
 
 
+
+
+
+    //public static String DB_FILEPATH = "/data/data/timclock/databases/export_";
+    // public static String DB_FILEPATH2 = this.context.getDatabasePath("db_filename");
+    public boolean exportDatabase(String sourceDbPath, String cibleDbPath) throws IOException {
+
+        // Close the SQLiteOpenHelper so it will commit the created empty
+        // database to internal storage.
+        close();
+        File source = new File(sourceDbPath);
+        File cible = new File(cibleDbPath);
+        if (source.exists()) {
+            Outils.copyFile(new FileInputStream(source), new FileOutputStream(cible));
+            // Access the copied database so SQLiteHelper will cache it and mark
+            // it as created.
+            getWritableDatabase().close();
+            return true;
+        }
+        return false;
+    }
 
 
 

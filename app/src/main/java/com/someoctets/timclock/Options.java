@@ -1,21 +1,29 @@
 package com.someoctets.timclock;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.support.design.widget.TextInputEditText;
+import com.google.android.material.textfield.TextInputEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Options extends Activity {
 
 
     public SharedPreferences sharedPreferences;
     public Outils outils = Outils.getInstanceOutils();
+
 
     boolean utiliserValeurParDefaut = false;
     boolean selectionnerToutParDefaut = false;
@@ -25,6 +33,7 @@ public class Options extends Activity {
     TextInputEditText defautPause;
 
 
+
     @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -32,6 +41,7 @@ public class Options extends Activity {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
        outils.setSharedPreferences(sharedPreferences);
+
         utiliserValeurParDefaut = outils.loadBoolean("utiliserValeurParDefaut", false);
         selectionnerToutParDefaut = outils.loadBoolean("selectionnerToutParDefaut", true);
 
@@ -58,19 +68,9 @@ public class Options extends Activity {
 
 
 
-
-
-
-
-
-
-
-
-
-
-        String  defautNombrePalettesString = outils.loadString("defautHeureEntree","");
+        String  defautHeureEntreeString = outils.loadString("defautHeureEntree","");
         defautHeureEntree = findViewById(R.id.defautHeureEntree);
-        defautHeureEntree.setText(defautNombrePalettesString);
+        defautHeureEntree.setText(defautHeureEntreeString);
         defautHeureEntree.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -92,9 +92,10 @@ public class Options extends Activity {
                 outils.saveString("defautHeureEntree", defautHeureEntree.getText().toString().trim());
             }
         });
-        String defautTarePaletteString = outils.loadString("defautHeureSortie","");
+
+        String defautHeureSortieString = outils.loadString("defautHeureSortie","");
         defautHeureSortie = findViewById(R.id.defautHeureSortie);
-        defautHeureSortie.setText(defautTarePaletteString);
+        defautHeureSortie.setText(defautHeureSortieString);
         defautHeureSortie.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -117,9 +118,9 @@ public class Options extends Activity {
             }
         });
 
-        String defautTareColisString = outils.loadString("defautPause","");
+        String defautPauseString = outils.loadString("defautPause","");
         defautPause = findViewById(R.id.defautPause);
-        defautPause.setText(defautTareColisString);
+        defautPause.setText(defautPauseString);
         defautPause.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -139,6 +140,27 @@ public class Options extends Activity {
             public void afterTextChanged(Editable s)
             {
                 outils.saveString("defautPause", defautPause.getText().toString().trim());
+            }
+        });
+
+
+
+        Button button = (Button) findViewById(R.id.buttonExporter);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Log.d("BUTTONS", "User tapped the Supabutton");
+                //Ici sauvegarde
+
+                EnregistrementDataSource enregistrementDataSource = new EnregistrementDataSource(getApplicationContext());
+                ArrayList save = enregistrementDataSource.getAllEnregistrements();
+
+                DBOpenHelper dbOpenHelper = new DBOpenHelper(getApplicationContext());
+                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/azerty.txt";
+                try {
+                    dbOpenHelper.exportDatabase( enregistrementDataSource.getDatabase().getPath().toString(), cible ) ;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

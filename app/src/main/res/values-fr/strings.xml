@@ -20,4 +20,6 @@
     <string name="selectall">Selectionner tout par défaut</string>
     <string name="sm">SAM</string>
     <string name="dm">DIM</string>
+    <string name="buttonExporter">Exporter</string>
+
 </resources>

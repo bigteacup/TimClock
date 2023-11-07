@@ -1,13 +1,9 @@
 package com.someoctets.timclock;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.os.Build;
-import android.os.Parcelable;
-import android.support.constraint.solver.Cache;
+
+import androidx.constraintlayout.solver.Cache;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,8 +18,6 @@ import java.util.Calendar;
 import android.widget.AdapterView;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class CalendarTim extends LinearLayout {
 
