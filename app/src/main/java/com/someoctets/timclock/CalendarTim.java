@@ -2,7 +2,7 @@ package com.someoctets.timclock;
 
 import android.content.Context;
 
-import androidx.constraintlayout.solver.Cache;
+//import androidx.constraintlayout.solver.Cache;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.widget.AdapterView;
+
+import com.google.common.cache.Cache;
 
 import java.util.ArrayList;
 

@@ -71,7 +71,6 @@
                         android:nextFocusRight="@id/sortie"
                         android:nextFocusDown="@id/sortie"
                         android:nextFocusForward="@id/sortie"
-                        android:numeric="integer"
                         android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +91,6 @@
                         android:nextFocusRight="@id/pause"
                         android:nextFocusDown="@id/pause"
                         android:nextFocusForward="@id/pause"
-                        android:numeric="integer"
                         android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +109,6 @@
                         android:maxLines="1"
                         android:nextFocusLeft="@id/sortie"
                         android:nextFocusDown="@id/fab"
-                        android:numeric="integer"
                         android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
