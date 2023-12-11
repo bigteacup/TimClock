@@ -41,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
     public TextInputEditText sortie;
     public TextInputEditText pause;
     private TextView strTotal2;
+    public TextInputEditText datein;
+    public TextInputEditText dateout;
+    public TextInputEditText libelle;
     public CaseJour selectedCase;
-    ViewGroup parent;
+
     int selectedDay = 0;
     int selectedMonth = 0;
     int selectedYear = 0;
@@ -104,38 +107,7 @@ public class MainActivity extends AppCompatActivity {
             if (firstDate.get(Calendar.DAY_OF_MONTH) == f.jour && firstDate.get(Calendar.MONTH) == todate.get(Calendar.MONTH)) {
                 selectedCase = f;
 
-/*
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
-                }
 
-
-                for (Enregistrement enr : values) {
-                    if (enr.getD().equals(firstDate.getTime())) {
-                        affichageFabLock();
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                        } else {
-                            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                        }
-
-
-                    } else {
-
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fab.getContext().getTheme()));
-                        } else {
-                            fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
-                        }
-
-
-                    }
-
-                }*/
             }
         }
 
@@ -337,81 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /*
-                    String sString = s.toString().replace("h","");
 
-                    if (ignoreChange == true)      {
-                        ignoreChange = false;
-                        return;
-                    }
-
-                        if( sString.length() == 0) {
-                            ignoreChange = true;
-                            String text = "0" + "<font color='gray'><i>h</i></font>" + "00" ;
-
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-                            } else {
-                                entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-                            }
-                            int pos = entree.getText().length();
-                            entree.setSelection(pos);
-                            ignoreChange = false;
-                        }
-                if( sString.length() == 1) {
-                    ignoreChange = true;
-                    String text = "0" + sString + "<font color='gray'><i>h</i></font>" + "00"  ;
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-                    } else {
-                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-                    }
-                    int pos = entree.getText().length();
-                    entree.setSelection(pos-sString.length());
-                    ignoreChange = false;
-                }
-                if( sString.length() == 2) {
-                    ignoreChange = true;
-                    String text =  sString + "<font color='gray'><i>h</i></font>" + "00" ;
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-                    } else {
-                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-                    }
-                    int pos = entree.getText().length();
-                    entree.setSelection(pos-sString.length());
-                    ignoreChange = false;
-                }
-                if( sString.length() == 3) {
-                    ignoreChange = true;
-                    String text = sString.substring(0,0) + "<font color='gray'><i>h</i></font>" + sString.substring(1,2) ;
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-                    } else {
-                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-                    }
-                    int pos = entree.getText().length();
-                    entree.setSelection(pos-sString.length());
-                    ignoreChange = false;
-                }
-                if( sString.length() == 4) {
-                    ignoreChange = true;
-                    String text = sString.substring(0,1) + "<font color='gray'><i>h</i></font>" + sString.substring(2,4) ;
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        entree.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY), TextView.BufferType.SPANNABLE);
-                    } else {
-                        entree.setText(Html.fromHtml(text), TextView.BufferType.SPANNABLE);
-                    }
-                    int pos = entree.getText().length();
-                    entree.setSelection(pos-sString.length());
-                    ignoreChange = false;
-                }
-
-    */
 
 
 
@@ -563,6 +461,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
+
+
+
+
+
     public String parseDate(String date) {
         if (date.length() == 1) {
             date = "000" + date;
@@ -582,6 +487,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return date;
     }
+
+
+
+
+
+
+
+
+
+
+
 
 
     public Enregistrement lireJour(int year, int month, int dayOfMonth) {
@@ -611,6 +527,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+
     public String composerStringDate(int year, int month, int dayOfMonth) {
         String strYear = String.valueOf(year);
         String strMonth = null;
@@ -634,6 +557,7 @@ public class MainActivity extends AppCompatActivity {
         return date;
 
     }
+
 
 
 
@@ -767,14 +691,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (trouve == true) {
-
-
-/*
-      entree.setText(String.valueOf(enrTrouve.getIn()));
-    sortie.setText(String.valueOf(enrTrouve.getOut()));
-    pause.setText(String.valueOf(enrTrouve.getPause()));
-    */
-        }
+             }
 
 
     }
@@ -794,6 +711,14 @@ public class MainActivity extends AppCompatActivity {
 
         return a;
     }
+
+
+
+
+
+
+
+
 
 
     public void majTotalMois() {
@@ -850,6 +775,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
+
+
+
+
+
+
+
     public void setSelectedDayInt(Date selectedDate) {
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);
@@ -864,61 +800,23 @@ public class MainActivity extends AppCompatActivity {
             sortie.setText(String.valueOf(enr.getOut()));
             pause.setText(String.valueOf(enr.getPause()));
 
-/*
-            if (editMode == false) {
-               // entree.setEnabled(false);
-               // sortie.setEnabled(false);
-               // pause.setEnabled(false);
-               // setFabLocked(true);
-          /*      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                }
-
-
-            }*/
-
         } catch (Exception e) {
         }
 
     }
 
-/*
-    public void setFabLocked(boolean lockedOrNot) {
-        this.fabLockedOrNot = lockedOrNot;
-        if (fabLockedOrNot == true) {
-
-            fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-            } else {
-                fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-            }
-
-        } else {
-           // fab.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-        }
-
-    }
-
-*/
 
 
 
 
 
 
-/*
-          if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-        majJour(selectedYear, selectedMonth, selectedDay);
-        editMode = false;
-        setFabLocked(true);
-        fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8"))); //  #24abd8 //ff33b5e5
 
 
-    }
-*/
+
+
+
+
 
     public void affichageFabLock(){
 
@@ -958,6 +856,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
+
+
+
    public void resetFab(){
        fabOrange = false;
        editMode = false;
@@ -965,6 +869,8 @@ public class MainActivity extends AppCompatActivity {
        entree.setTextColor(Color.BLACK);
        sortie.setTextColor(Color.BLACK);
    }
+
+
 
 
 
@@ -1004,28 +910,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-            /*else if(fabOrange == true && lockFab == true && editMode == false ) {
-                fabOrange = false;
-                editMode = true;
-                pause.setTextColor(Color.BLACK);
-                entree.setTextColor(Color.BLACK);
-                sortie.setTextColor(Color.BLACK);
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8")));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
-                }
-             //  majJour(selectedYear, selectedMonth, selectedDay);
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
-                entree.requestFocus();
-                entree.selectAll();
-
-
-            }
-            */else if (editMode == true && lockFab == true && fabOrange == true ) {
+                else if (editMode == true && lockFab == true && fabOrange == true ) {
                  fabOrange = false;
                 fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
                 if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
@@ -1110,15 +995,7 @@ public class MainActivity extends AppCompatActivity {
                 pause.setText(outils.loadString("defautPause", ""));
             }
 
-  /*
-  nombreDePalettes.setText(outils.loadString("defautNombrePalettes",""));
-    poidPalet.setText(outils.loadString("defautTarePalette",""));
-    tareColis.setText(outils.loadString("defautTareColis",""));
-    */
-            //   nombreDePalettes.setText("1");
 
-            //  poidPalet.setText("25");
-            //   tareColis.setText("0.6");
         }
 
 
@@ -1127,16 +1004,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//////////////  if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-
-
-
-/*
-    public void deleteRecord(Enregistrement enr) {
-        long id = enr.getId();
-        System.out.println("Enregistrement deleted with id: " + id);
-        db.delete(dbOpenHelper.TABLE_DATE, dbOpenHelper.COLUMN_ID
-                + " = " + id, null);
-    }
-*/
 }

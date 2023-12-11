@@ -21,7 +21,7 @@ public class EnregistrementDataSource {
     // Champs de la base de données
     private SQLiteDatabase database;
     private DBOpenHelper dbHelper;
-    private String[] allColumns = {DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE};
+    private String[] allColumns = {DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE, DBOpenHelper.COLUMN_DATEIN, DBOpenHelper.COLUMN_DATEOUT, DBOpenHelper.COLUMN_LIBELLE};
 
     public EnregistrementDataSource(Context context) {
 
@@ -54,7 +54,20 @@ public class EnregistrementDataSource {
         cursor.moveToFirst();
         Enregistrement newEnregistrement = cursorToEnregistrement(cursor);
         cursor.close();
-        Log.i("debug", "ZZZZZZZZZZZZZZZZZZ: ");
+        Log.i("debug", "Horaires db: ");
+        return newEnregistrement;
+    }
+    public Enregistrement createEnregistrement(String keyDate, String keyLibelle) {
+
+        ContentValues values = new ContentValues();
+        values.put(DBOpenHelper.COLUMN_DATE, keyDate);
+        values.put(DBOpenHelper.COLUMN_LIBELLE, keyLibelle );
+        long insertId = database.insert(DBOpenHelper.TABLE_DATE, null, values);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, DBOpenHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+        cursor.moveToFirst();
+        Enregistrement newEnregistrement = cursorToEnregistrement(cursor);
+        cursor.close();
+        Log.i("debug", "tag db : ");
         return newEnregistrement;
     }
 

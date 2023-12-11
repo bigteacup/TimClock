@@ -21,4 +21,8 @@
     <string name="sm">SAM</string>
     <string name="dm">DIM</string>
     <string name="buttonExporter">Export</string>
+    <string name="datein">Date début</string>
+    <string name="dateout">Date fin</string>
+    <string name="libelle">Libellé</string>
+
 </resources>

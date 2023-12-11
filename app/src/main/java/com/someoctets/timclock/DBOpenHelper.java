@@ -20,20 +20,25 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_HOURIN = "_hourin";
     public static final String COLUMN_HOUROUT = "_hourout";
     public static final String COLUMN_PAUSE = "_pause";
-
+    public static final String COLUMN_DATEIN = "_datein";
+    public static final String COLUMN_DATEOUT = "_dateout";
+    public static final String COLUMN_LIBELLE = "_libelle";
     private static final String DATABASE_NAME = "timclockdate.db";
     private static final int DATABASE_VERSION = 1;
 
-
+  //  private static final String DATABASE_CREATE_color = "CREATE TABLE IF NOT EXISTS files(color text, incident_id text)";
 
     // Commande sql pour la création de la base de données
-    private static final String DATABASE_CREATE = "create table "
+    private static final String DATABASE_CREATE = " create table "
             +  TABLE_DATE + " ("
             +  COLUMN_ID + " INTEGER primary key autoincrement, "
             +  COLUMN_DATE + " TEXT NOT NULL, "
             +  COLUMN_HOURIN + " INTEGER, "
             +  COLUMN_HOUROUT + " INTEGER, "
-            +  COLUMN_PAUSE + " INTEGER);";
+            +  COLUMN_PAUSE + " INTEGER, "
+            +  COLUMN_DATEIN + " INTEGER, "
+            +  COLUMN_DATEOUT + " INTEGER, "
+            +  COLUMN_LIBELLE + " TEXT);";
 
     public DBOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,7 +55,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         Log.w(DBOpenHelper.class.getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATE );
         onCreate(db);
     }
 

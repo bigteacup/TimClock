@@ -148,14 +148,14 @@ public class Options extends Activity {
         Button button = (Button) findViewById(R.id.buttonExporter);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Log.d("BUTTONS", "User tapped the Supabutton");
+                Log.d("BUTTONS", "db export");
                 //Ici sauvegarde
 
                 EnregistrementDataSource enregistrementDataSource = new EnregistrementDataSource(getApplicationContext());
                 ArrayList save = enregistrementDataSource.getAllEnregistrements();
 
                 DBOpenHelper dbOpenHelper = new DBOpenHelper(getApplicationContext());
-                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/azerty.txt";
+                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/azerty.db";
                 try {
                     dbOpenHelper.exportDatabase( enregistrementDataSource.getDatabase().getPath().toString(), cible ) ;
                 } catch (IOException e) {
