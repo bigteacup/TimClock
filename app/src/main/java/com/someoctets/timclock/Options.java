@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.type.DateTime;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,6 +19,7 @@ import android.widget.Switch;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Options extends Activity {
 
@@ -155,7 +158,9 @@ public class Options extends Activity {
                 ArrayList save = enregistrementDataSource.getAllEnregistrements();
 
                 DBOpenHelper dbOpenHelper = new DBOpenHelper(getApplicationContext());
-                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/azerty.db";
+                //mettre heure ici
+              // String nomDexportDB = ;
+                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/TimClock_DB"+ +".db";
                 try {
                     dbOpenHelper.exportDatabase( enregistrementDataSource.getDatabase().getPath().toString(), cible ) ;
                 } catch (IOException e) {
