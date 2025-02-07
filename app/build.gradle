@@ -6,8 +6,8 @@ android {
         applicationId 'com.someoctets.timclock'
         minSdkVersion 16
         targetSdkVersion 34
-        versionCode 27
-        versionName "27"
+        versionCode 28
+        versionName "28"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         multiDexEnabled true
     }
@@ -48,7 +48,8 @@ dependencies {
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
     implementation 'com.google.firebase:firebase-inappmessaging-display:20.4.0'
     implementation 'com.google.guava:guava:27.0.1-android'
-  //  implementation 'com.android.support:multidex:1.0.3'
+  //  implementation 'androidx.preference:preference:1.2.1'
+    //  implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.multidex:multidex:2.0.1'
 
 

@@ -21,8 +21,8 @@ public class EnregistrementDataSource {
     // Champs de la base de données
     private SQLiteDatabase database;
     private DBOpenHelper dbHelper;
-    private String[] allColumns = {DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE, DBOpenHelper.COLUMN_DATEIN, DBOpenHelper.COLUMN_DATEOUT, DBOpenHelper.COLUMN_LIBELLE};
-
+    private String[] allColumns = {DBOpenHelper.COLUMN_ID, DBOpenHelper.COLUMN_DATE, DBOpenHelper.COLUMN_HOURIN, DBOpenHelper.COLUMN_HOUROUT, DBOpenHelper.COLUMN_PAUSE};
+//, DBOpenHelper.COLUMN_DATEIN, DBOpenHelper.COLUMN_DATEOUT, DBOpenHelper.COLUMN_LIBELLE
     public EnregistrementDataSource(Context context) {
 
         dbHelper = new DBOpenHelper(context);
@@ -49,21 +49,21 @@ public class EnregistrementDataSource {
         values.put(DBOpenHelper.COLUMN_HOURIN, keyIn);
         values.put(DBOpenHelper.COLUMN_HOUROUT, keyOut);
         values.put(DBOpenHelper.COLUMN_PAUSE, keyPause);
-        long insertId = database.insert(DBOpenHelper.TABLE_DATE, null, values);
-        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, DBOpenHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+        long insertId = database.insert(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, null, values);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, allColumns, DBOpenHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Enregistrement newEnregistrement = cursorToEnregistrement(cursor);
         cursor.close();
         Log.i("debug", "Horaires db: ");
         return newEnregistrement;
     }
-    public Enregistrement createEnregistrement(String keyDate, String keyLibelle) {
+    public Enregistrement createEnregistrement(String keyDate, String keyLibelle) { //
 
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.COLUMN_DATE, keyDate);
         values.put(DBOpenHelper.COLUMN_LIBELLE, keyLibelle );
-        long insertId = database.insert(DBOpenHelper.TABLE_DATE, null, values);
-        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, DBOpenHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+        long insertId = database.insert(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, null, values);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, allColumns, DBOpenHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
         Enregistrement newEnregistrement = cursorToEnregistrement(cursor);
         cursor.close();
@@ -76,7 +76,7 @@ public class EnregistrementDataSource {
 
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.COLUMN_DATE, keyDate);
-        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, allColumns, null, null, null, null, null);
         cursor.moveToFirst();
         Enregistrement enr = null;
         while (!cursor.isAfterLast()) {
@@ -101,7 +101,7 @@ public class EnregistrementDataSource {
         long id = date.getId();
         System.out.println("Enregistrement deleted with id: " + id);
 
-        database.delete(DBOpenHelper.TABLE_DATE, DBOpenHelper.COLUMN_ID + " = " + id, null);
+        database.delete(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, DBOpenHelper.COLUMN_ID + " = " + id, null);
 
     }
 
@@ -113,7 +113,7 @@ public class EnregistrementDataSource {
 
 
         //  try {
-        Cursor cursor = database.query(DBOpenHelper.TABLE_DATE, allColumns, null, null, null, null, null);
+        Cursor cursor = database.query(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

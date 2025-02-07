@@ -1,6 +1,8 @@
 package com.someoctets.timclock;
 
 
+
+
 import android.content.SharedPreferences;
 
 import java.io.File;
@@ -9,7 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
-public class Outils {
+public class Outils  {
 
     private static final Outils outils = new Outils() ;
     SharedPreferences sharedPreferences;

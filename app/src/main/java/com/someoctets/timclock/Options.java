@@ -158,9 +158,7 @@ public class Options extends Activity {
                 ArrayList save = enregistrementDataSource.getAllEnregistrements();
 
                 DBOpenHelper dbOpenHelper = new DBOpenHelper(getApplicationContext());
-                //mettre heure ici
-              // String nomDexportDB = ;
-                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/TimClock_DB"+ +".db";
+                String cible = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()+"/TimClock_DB_"+ System.currentTimeMillis() +".db";
                 try {
                     dbOpenHelper.exportDatabase( enregistrementDataSource.getDatabase().getPath().toString(), cible ) ;
                 } catch (IOException e) {

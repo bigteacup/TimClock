@@ -5,9 +5,9 @@ import android.content.Context;
         import android.graphics.Color;
         import android.graphics.Paint;
         import android.util.AttributeSet;
-        import android.widget.TextView;
 
-public class RoundedTextView extends TextView
+
+public class RoundedTextView extends androidx.appcompat.widget.AppCompatTextView
 {
     private float strokeWidth;
     int strokeColor,solidColor;
