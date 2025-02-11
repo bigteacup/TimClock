@@ -31,6 +31,18 @@
         app:backgroundTint="#49CAF5"
         app:srcCompat="@android:drawable/ic_lock_idle_lock" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="#FFFFFF"
+        app:backgroundTint="#49CAF5"
+        app:fabSize="normal"
+        app:maxImageSize="40dp"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
     <include
         android:id="@+id/custom_cal"
         layout="@layout/content_main" />
