@@ -108,72 +108,26 @@
                         android:maxLength="4"
                         android:maxLines="1"
                         android:nextFocusLeft="@id/sortie"
-                        android:nextFocusDown="@id/fab"
+                        android:nextFocusDown="@id/fabSaveButton"
                         android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/datein"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/datein"
-                        android:inputType="datetime|date"
-                        android:maxLength="6"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/dateout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/dateout"
-                        android:inputType="datetime|date"
-                        android:maxLength="6"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/datetag"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/libelle"
-                        android:inputType="text"
-                        android:maxLength="16"
-                        android:maxLines="1"
-                        android:selectAllOnFocus="true" />
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
+            <View
+                android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"></LinearLayout>
+                android:background="#EDE7F6"
+                android:minHeight="10px"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/donneesDuJour"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
     </ScrollView>

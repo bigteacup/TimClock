@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/itemdb"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/modifierEntree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/heurein"
+            android:inputType="number"
+            android:maxLength="5"
+            android:maxLines="1"
+            android:nextFocusRight="@id/modifierSortie"
+            android:nextFocusDown="@id/modifierSortie"
+            android:nextFocusForward="@id/modifierSortie"
+            android:selectAllOnFocus="true"
+            android:textSize="12sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/modifierSortie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/heureout"
+            android:inputType="number"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:nextFocusLeft="@id/modifierEntree"
+            android:nextFocusRight="@id/modifierPause"
+            android:nextFocusDown="@id/modifierPause"
+            android:nextFocusForward="@id/modifierPause"
+            android:selectAllOnFocus="true"
+            android:textSize="12sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/modifierPause"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/pause"
+            android:inputType="number"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:nextFocusLeft="@id/modifierSortie"
+            android:nextFocusDown="@id/fabSaveButton"
+            android:selectAllOnFocus="true"
+            android:textSize="12sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

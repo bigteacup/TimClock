@@ -134,8 +134,9 @@ public class CalendarTim extends LinearLayout {
                 InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(main.entree, InputMethodManager.SHOW_IMPLICIT);
                 main.resetFab();
-                main.affichageFabLock();
+             //   main.affichageFabLock();
                 main.entree.selectAll();
+                //// TODO: 17/03/2025   controler ici
             }
         });
     }
@@ -154,7 +155,6 @@ public class CalendarTim extends LinearLayout {
 
 */
 public void majSelectedCase(CaseJour cs) {
-
 
 
             // main.entree.setEnabled(true);
@@ -197,7 +197,7 @@ public void majSelectedCase(CaseJour cs) {
             InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(main.entree, InputMethodManager.SHOW_IMPLICIT);
             main.resetFab();
-            main.affichageFabLock();
+           // main.affichageFabLock();
             main.entree.selectAll();
 
 }
@@ -211,8 +211,8 @@ public void majSelectedCase(CaseJour cs) {
 
         ArrayList<CaseJour> caseJoursList = new ArrayList<CaseJour>();
         //   List<Date> dayValueInCells = new ArrayList<Date>();
-        Calendar mCal = (Calendar) cal.clone();
-        mCal.set(Calendar.DAY_OF_MONTH, 1);
+        Calendar mCal = (Calendar) cal.clone(); //todo  Remplacer Calendar par un truc plus recent
+        mCal.set(Calendar.DAY_OF_MONTH,0);                     //valeur à 1 par defaut, modifié à 0 pour éliminer le bug du 01 09 2019
 
         int firstDayOfTheMonth = mCal.get(Calendar.DAY_OF_WEEK) - 2;
         mCal.add(Calendar.DAY_OF_MONTH, -firstDayOfTheMonth);

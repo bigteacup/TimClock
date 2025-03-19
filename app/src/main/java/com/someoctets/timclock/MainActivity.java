@@ -6,22 +6,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -45,18 +51,19 @@ public class MainActivity extends AppCompatActivity {
     public TextInputEditText dateout;
     public TextInputEditText libelle;
     public CaseJour selectedCase;
-
+    public long  textInputSelected;
     int selectedDay = 0;
     int selectedMonth = 0;
     int selectedYear = 0;
     GridAdapter ga;
     CalendarTim caltim;
-    boolean fabLockedOrNot = false;
+    boolean fabSaveButtonIsLocked = true;
     boolean editMode = false;
-    FloatingActionButton fab;
+    FloatingActionButton fabSaveButton;
+    FloatingActionButton fabUnlockButton;
     boolean fabOrange = false;
-    boolean selectAllParDefaut ;
-    boolean utiliserValeurParDefaut ;
+    boolean selectAllParDefaut;
+    boolean utiliserValeurParDefaut;
 
     ArrayList<Enregistrement> values = new ArrayList<Enregistrement>();
 
@@ -94,106 +101,115 @@ public class MainActivity extends AppCompatActivity {
         ga.setMain(this);
         caltimF.setMain(this);
         setSupportActionBar(toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fabSaveButton = (FloatingActionButton) findViewById(R.id.fabSaveButton);
+        fabUnlockButton = (FloatingActionButton) findViewById(R.id.fabUnlockButton);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         outils.setSharedPreferences(sharedPreferences);
         Calendar firstDate = Calendar.getInstance();
         Calendar todate = Calendar.getInstance();
 
+
         for (CaseJour f : caltim.getmAdapter().monthlyCases) {
             todate.setTime(f.getDateCase());
-
-
             if (firstDate.get(Calendar.DAY_OF_MONTH) == f.jour && firstDate.get(Calendar.MONTH) == todate.get(Calendar.MONTH)) {
                 selectedCase = f;
-
-
             }
         }
 
 
-        final Button optionsButton  = (Button) findViewById(R.id.boutonOption);
+        final Button optionsButton = (Button) findViewById(R.id.boutonOption);
         optionsButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Options.class);
                 startActivity(intent);
-
-
-
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //   Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                if (fabSaveButtonIsLocked == false && editMode == false) {
+                    enregistrer(selectedYear, selectedMonth, selectedDay);
+                }
+                if (fabSaveButtonIsLocked == false && editMode == true){
+                    //todo enregistrer sur l'idDb correspondant à eventlistenner du textinput selectionné (recuperer le code dans "majjour" et "enregistrer"
 
-
-
-                switcherFabLock();
-
-
-
+                }
             }
         });
-
+        fabUnlockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switcherFabSaveButtonIsLocked();
+            }
+        });
 
         entree = findViewById(R.id.entree);
         entree.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int st, int b, int c) {
-
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int st, int c, int a) {
-
             }
-            boolean ignoreChange = false;
+
+
+
             @Override
             public void afterTextChanged(Editable s) {
-
                 try {
                     if (check(s.toString())) {
-                       entree.setText("0");
+                        entree.setText("0");
                         entree.selectAll();
                     }
                 } catch (Exception e) {
-
                 }
-
-
 
 
             }
         });
-
+        entree.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    editMode = false;
+                    fabSaveButtonIsLocked=false;
+                    affichageFabButtons();
+                } else {
+                }
+            }
+        });
         sortie = findViewById(R.id.sortie);
         sortie.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int st, int b, int c) {
-
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int st, int c, int a) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 try {
                     if (check(s.toString())) {
                         sortie.setText("0");
                         sortie.selectAll();
                     }
                 } catch (Exception e) {
-
+                }
+            }
+        });
+        sortie.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    editMode = false;
+                } else {
                 }
             }
         });
@@ -204,12 +220,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int st, int b, int c) {
-
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int st, int c, int a) {
-
             }
 
             @Override
@@ -220,21 +234,30 @@ public class MainActivity extends AppCompatActivity {
                         pause.selectAll();
                     }
                 } catch (Exception e) {
-
+                }
+            }
+        });
+        pause.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus){
+                    editMode = false;
+                } else {
                 }
             }
         });
 
+
         strTotal2 = findViewById(R.id.strTotal2);
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
 
 
-       entree.requestFocus();
+        entree.requestFocus();
         entree.selectAll();
         majTotalMois();
-        affichageFabLock();
+        affichageFabButtons();
 
 
     }
@@ -250,17 +273,16 @@ public class MainActivity extends AppCompatActivity {
 
             for (CaseJour f : caltim.getmAdapter().monthlyCases) {
                 pauseTodate.setTime(f.getDateCase());
-
-
                 if (pauseDate.get(Calendar.DAY_OF_MONTH) == f.jour && pauseDate.get(Calendar.MONTH) == pauseTodate.get(Calendar.MONTH)) {
                     cs = f;
                 }
             }
             //caltim.setUpCalendarAdapter();
             try {
-            caltim.majSelectedCase(cs);
-          } catch (Exception e) {}
-        }catch (Exception e){
+                caltim.majSelectedCase(cs);
+            } catch (Exception e) {
+            }
+        } catch (Exception e) {
 
         }
     }
@@ -271,15 +293,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-     /*   try {
-            this.finishAffinity();
-        } catch (Exception e) {
-        }
-        this.finish();
-        System.exit(0);
-        */
-
 
     public boolean check(String a) {
         Boolean c = false;
@@ -301,28 +314,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return a;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public long[] calculer(long entreeD, long sortieD, long pauseD, boolean useDbData) {
@@ -398,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
             //    System.out.println("Avant modif : " + ecart);
 
             if (sortieDate.before(entreDate)) {
-                GregorianCalendar calendar = new java.util.GregorianCalendar();
+                GregorianCalendar calendar = new GregorianCalendar();
                 calendar.setTime(sortieDate);
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
 
@@ -407,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
             /////////// //correction fuseau horaire//////////
             SimpleDateFormat srf = new SimpleDateFormat("HHmm");
 
-            Date refDate = srf.parse("0000");
+            Date refDate = srf.parse("0000"); // TODO inutile à suprimer après verif
             long pauseL = pauseDate.getTime() - refDate.getTime();
             //       if(pauseL < 0){
             //       pauseL = pauseL * -1;
@@ -461,46 +452,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
     public String parseDate(String date) {
         if (date.length() == 1) {
             date = "000" + date;
-
         }
         if (date.length() == 2) {
             date = "00" + date;
-
         }
         if (date.length() == 3) {
             date = "0" + date;
-
         }
         if (date.length() == 4) {
             date = date;
-
         }
         return date;
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-    public Enregistrement lireJour(int year, int month, int dayOfMonth) {
+    public ArrayList<Enregistrement> lireJour(int year, int month, int dayOfMonth) {
         String strYear = String.valueOf(year);
         String strMonth = null;
 
@@ -518,20 +487,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         String date = "'" + strDay + strMonth + strYear + "'";
-        Enregistrement enr = lireEnregistrement(date);
 
-        return enr;
+
+        return lireEnregistrementsDuJour(date);
 
     }
-
-
-
-
-
-
-
-
-
 
 
     public String composerStringDate(int year, int month, int dayOfMonth) {
@@ -559,36 +519,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-    public Enregistrement lireEnregistrement(String keyDate) {
-        Enregistrement enr = null;
-        for (Enregistrement e : values) {
+    public ArrayList<Enregistrement> lireEnregistrementsDuJour(String keyDate) {
+        ArrayList<Enregistrement> listeEnr = new ArrayList<>();
+        for (Enregistrement e : values) { //todo maintenir values à jour : values = datasource.getAllEnregistrements();
             if (e.getDate().equals(keyDate)) {
-                enr = e;
-                break;
+                listeEnr.add(e);
+
             }
         }
-        return enr;
+        return listeEnr;
 
     }
 
 
-
-
-
-
-
-
-
-
-    public void majJour(int year, int month, int dayOfMonth) {
+    public void majJour(int year, int month, int dayOfMonth) { //// TODO: 17/03/2025    la sauvergarde de la donnée se fait ici
         String strYear = String.valueOf(year);
         String strMonth = null;
         String strDay = null;
@@ -691,7 +635,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (trouve == true) {
-             }
+        }
 
 
     }
@@ -711,14 +655,6 @@ public class MainActivity extends AppCompatActivity {
 
         return a;
     }
-
-
-
-
-
-
-
-
 
 
     public void majTotalMois() {
@@ -759,12 +695,12 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             String minutesString = "";
-            if (((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60) < 10){
-            minutesString = "0"  + Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
-            }else {
+            if (((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60) < 10) {
+                minutesString = "0" + Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
+            } else {
                 minutesString = Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
             }
-            strTotal2.setText(Long.toString((totalMois / 60 / 1000 / 60)) + " H " +  minutesString);
+            strTotal2.setText(Long.toString((totalMois / 60 / 1000 / 60)) + " H " + minutesString);
         } catch (Exception e) {
 
         }
@@ -776,17 +712,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    public void setSelectedDayInt(Date selectedDate) {
+    public void setSelectedDayInt(Date selectedDate) {    //values = datasource.getAllEnregistrements();
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);
 
@@ -794,11 +720,20 @@ public class MainActivity extends AppCompatActivity {
         selectedMonth = (c.get(Calendar.MONTH) + 1);
         selectedYear = c.get(Calendar.YEAR);
 
+        LinearLayout donneesDuJour = (LinearLayout) findViewById(R.id.donneesDuJour);
+        donneesDuJour.removeAllViews();
         try {
-            Enregistrement enr = lireJour(selectedYear, selectedMonth, selectedDay);
-            entree.setText(String.valueOf(enr.getIn()));
-            sortie.setText(String.valueOf(enr.getOut()));
-            pause.setText(String.valueOf(enr.getPause()));
+            ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
+
+//// TODO: 17/03/2025
+            for (Enregistrement e : enr) {
+                ItemDbLinearLayout item = new ItemDbLinearLayout(this, this, e.getId());
+                item.setModifierEntree(e.getIn());
+                item.setModifierSortie(e.getOut());
+                item.setModifierPause(e.getPause());
+                donneesDuJour.addView(item);
+            }
+
 
         } catch (Exception e) {
         }
@@ -809,73 +744,171 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
-
-
-
-
-    public void affichageFabLock(){
-
-
-            boolean lockFab = false;
-            String s = composerStringDate(selectedYear, selectedMonth, selectedDay );
-            for (Enregistrement enr :values) {
-                if (enr.getDate().equals(s)) {
-                    lockFab = true;
-                    break;
-                }
-
-            }
-            if (lockFab == false) {
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8")));
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
-                }
-                // setSelectAllParDefaut(outils.loadBoolean("selectionnerToutParDefaut", true));
-                setUtiliserValeurParDefaut(outils.loadBoolean("utiliserValeurParDefaut", false));
-            } else {
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-                pause.setTextColor(Color.GRAY);
-                entree.setTextColor(Color.GRAY);
-                sortie.setTextColor(Color.GRAY);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                }
-
-
-        }
-
-
+    public void resetFab() { //todo à supprimer après refonte
+        fabOrange = false;
+        editMode = false;
+        pause.setTextColor(Color.BLACK);
+        entree.setTextColor(Color.BLACK);
+        sortie.setTextColor(Color.BLACK);
     }
 
 
+    public void enregistrer(int year, int month, int dayOfMonth) { //todo
+
+        String strYear = String.valueOf(year);
+        String strMonth = null;
+        String strDay = null;
+
+        boolean trouve = false;
+        String date = "";
+        long keyIn = 0;
+        long keyOut = 0;
+        long keyPause = 0;
+
+        if (month < 10) {
+            strMonth = "0" + String.valueOf(month);
+        } else {
+            strMonth = String.valueOf(month);
+        }
+        if (dayOfMonth < 10) {
+            strDay = "0" + String.valueOf(dayOfMonth);
+        } else {
+            strDay = String.valueOf(dayOfMonth);
+        }
+        date = "'" + strDay + strMonth + strYear + "'";
 
 
+        if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
+            try {
+                keyIn = Long.parseLong(entree.getText().toString());
+            } catch (Exception e1) {
 
+            }
+            try {
+                keyOut = Long.parseLong(sortie.getText().toString());
+            } catch (Exception e1) {
 
+            }
+            try {
+                keyPause = Long.parseLong(pause.getText().toString());
+            } catch (Exception e1) {
 
-   public void resetFab(){
-       fabOrange = false;
-       editMode = false;
-       pause.setTextColor(Color.BLACK);
-       entree.setTextColor(Color.BLACK);
-       sortie.setTextColor(Color.BLACK);
-   }
+            }
+            if (keyIn + keyOut + keyPause > 0) {
 
+                datasource.open();
+                Enregistrement enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
+                values = datasource.getAllEnregistrements();
+                datasource.close();
 
+                caltim.majCase(ga.getPosition(selectedCase));
+                majTotalMois();
+                pause.getText().clear();
+                entree.getText().clear();
+                sortie.getText().clear();
+                setSelectedDayInt(selectedCase.getDateCase()); //maj
+            }
+        }
+    }
 
+    public void modifier(Enregistrement enregistrement) {//todo à lier avec l'id de l'enregistrement
+        if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
+           // majJour(selectedYear, selectedMonth, selectedDay);
+            datasource.open();
+            datasource.deleteEnregistrement(enrTrouve);
+            values = datasource.getAllEnregistrements();
+            datasource.close();
+            try {
+                keyIn = Long.parseLong(entree.getText().toString());
+            } catch (Exception e1) {
 
+            }
+            try {
+                keyOut = Long.parseLong(sortie.getText().toString());
+            } catch (Exception e1) {
 
+            }
+            try {
+                keyPause = Long.parseLong(pause.getText().toString());
+            } catch (Exception e1) {
 
-    public void switcherFabLock() {
+            }
+            if (keyIn + keyOut + keyPause > 0) {
+
+                datasource.open();
+                Enregistrement enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
+                values = datasource.getAllEnregistrements();
+                datasource.close();
+
+                caltim.majCase(ga.getPosition(selectedCase));
+                majTotalMois();
+            } else {
+
+                caltim.majCase(ga.getPosition(selectedCase));
+                majTotalMois();
+                //majSelectedCase
+               // ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
+                //lireEnregistrementsDuJour();
+                //majcase;
+            }
+        }
+    }
+public void switcherFabSaveButtonIsLocked(){
+    if (fabSaveButtonIsLocked) {
+        fabSaveButtonIsLocked = false;
+    } else {
+        fabSaveButtonIsLocked = true;
+    }
+    affichageFabButtons();
+}
+
+public void affichageFabButtons(){ //met à jour l'affichage des deux bouttons fab fabSave et fabUnlock
+    affichageFabSaveButton();
+    affichageFabUnlockButton();
+}
+
+    public void affichageFabUnlockButton() {
+        if (fabSaveButtonIsLocked == false) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fabUnlockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp, fabUnlockButton.getContext().getTheme()));
+            } else {
+                fabUnlockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp));
+            }
+            fabUnlockButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F57449"))); //F57449 //orange
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fabUnlockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabUnlockButton.getContext().getTheme()));
+            } else {
+                fabUnlockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
+            }
+            fabUnlockButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8"))); //bleu
+        }
+    }
+    public void affichageFabSaveButton() {
+
+        if (fabSaveButtonIsLocked == false) {
+            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8"))); //bleu
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp, fabSaveButton.getContext().getTheme()));
+            } else {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_save_black_24dp));
+            }
+            // setSelectAllParDefaut(outils.loadBoolean("selectionnerToutParDefaut", true));
+            setUtiliserValeurParDefaut(outils.loadBoolean("utiliserValeurParDefaut", false));
+        } else {
+            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //gris
+            pause.setTextColor(Color.GRAY);
+            entree.setTextColor(Color.GRAY);
+            sortie.setTextColor(Color.GRAY);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabSaveButton.getContext().getTheme()));
+            } else {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
+            }
+        }
+    }
+
+    public void switcherFabLock() { //todo a suprimer apres refonte ?
 
         boolean lockFab = false;
         String s = composerStringDate(selectedYear, selectedMonth, selectedDay);
@@ -887,20 +920,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        if (lockFab == true && fabOrange == false && editMode == false ) { // && editMode == true && fabOrange == false
+        if (lockFab == true && fabOrange == false && editMode == false) { // && editMode == true && fabOrange == false
 
-                //fabOrange = false;
-                 editMode = true;
-                fabOrange = true;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp, fab.getContext().getTheme()));
-                } else {
-                    fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp));
-                }
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F57449"))); //F57449
-                pause.setTextColor(Color.BLACK);
-                entree.setTextColor(Color.BLACK);
-                sortie.setTextColor(Color.BLACK);
+            //fabOrange = false;
+            editMode = true;
+            fabOrange = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp, fabSaveButton.getContext().getTheme()));
+            } else {
+                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp));
+            }
+            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F57449"))); //F57449 //orange
+            pause.setTextColor(Color.BLACK);
+            entree.setTextColor(Color.BLACK);
+            sortie.setTextColor(Color.BLACK);
 
 
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -909,89 +942,88 @@ public class MainActivity extends AppCompatActivity {
             entree.selectAll();
 
 
+        } else if (editMode == true && lockFab == true && fabOrange == true) {
+            fabOrange = false;
+            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
+            if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
+                majJour(selectedYear, selectedMonth, selectedDay);
+                editMode = false;
             }
-                else if (editMode == true && lockFab == true && fabOrange == true ) {
-                 fabOrange = false;
-                fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
-                if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-                    majJour(selectedYear, selectedMonth, selectedDay);
-                    editMode = false;
+            if (lireJour(selectedYear, selectedMonth, selectedDay) != null) {
+                pause.setTextColor(Color.GRAY);
+                entree.setTextColor(Color.GRAY);
+                sortie.setTextColor(Color.GRAY);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabSaveButton.getContext().getTheme()));
+                } else {
+                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
                 }
-                if(lireJour(selectedYear, selectedMonth, selectedDay) != null) {
-                    pause.setTextColor(Color.GRAY);
-                    entree.setTextColor(Color.GRAY);
-                    sortie.setTextColor(Color.GRAY);
+            } else {
+                fabOrange = false;
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                    } else {
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                    }
-                }else {
-                    fabOrange = false;
+                pause.getText().clear();
+                entree.getText().clear();
+                sortie.getText().clear();
+                //  affichageFabLock();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+                entree.requestFocus();
+                entree.selectAll();
 
-                    pause.getText().clear();
-                    entree.getText().clear();
-                    sortie.getText().clear();
-                    affichageFabLock();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
-                    entree.requestFocus();
-                    entree.selectAll();
+            }
 
+
+        } else if (lockFab == false) {
+            if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
+                majJour(selectedYear, selectedMonth, selectedDay);
+                fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
+                pause.setTextColor(Color.GRAY);
+                entree.setTextColor(Color.GRAY);
+                sortie.setTextColor(Color.GRAY);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabSaveButton.getContext().getTheme()));
+                } else {
+                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
                 }
-
-
-
-            }else if (lockFab== false){
-                if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-                    majJour(selectedYear, selectedMonth, selectedDay);
-                    fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
-                    pause.setTextColor(Color.GRAY);
-                    entree.setTextColor(Color.GRAY);
-                    sortie.setTextColor(Color.GRAY);
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fab.getContext().getTheme()));
-                    } else {
-                        fab.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                    }
-                }else {
-                    pause.setTextColor(Color.BLACK);
-                    entree.setTextColor(Color.BLACK);
-                    sortie.setTextColor(Color.BLACK);
-                }
-
-
+            } else {
+                pause.setTextColor(Color.BLACK);
+                entree.setTextColor(Color.BLACK);
+                sortie.setTextColor(Color.BLACK);
             }
 
 
         }
 
+
+    }
+
     public void setSharedPreferences(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
     }
-    public  SharedPreferences getSharedPreferences(){
+
+    public SharedPreferences getSharedPreferences() {
         return sharedPreferences;
 
 
     }
 
 
-    public void setUtiliserValeurParDefaut(boolean trueOrFalse){
-        if(trueOrFalse == true) {
+    public void setUtiliserValeurParDefaut(boolean trueOrFalse) {
+        if (trueOrFalse == true) {
             entree = findViewById(R.id.entree);
             sortie = findViewById(R.id.sortie);
             pause = findViewById(R.id.pause);
 
 
-            if(outils.loadString("defautHeureEntree", "").length() > 0){
+            if (outils.loadString("defautHeureEntree", "").length() > 0) {
                 entree.setText(outils.loadString("defautHeureEntree", ""));
             }
-            if(outils.loadString("defautHeureSortie", "").length() > 0){
+            if (outils.loadString("defautHeureSortie", "").length() > 0) {
                 sortie.setText(outils.loadString("defautHeureSortie", ""));
             }
-            if(outils.loadString("defautPause", "").length() > 0){
+            if (outils.loadString("defautPause", "").length() > 0) {
                 pause.setText(outils.loadString("defautPause", ""));
             }
 
@@ -1000,8 +1032,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
-
 
 
 }

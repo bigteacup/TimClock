@@ -51,9 +51,10 @@ public class GridAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Calendar selDayCal = Calendar.getInstance();
-       try {//bug du 01 09 2019 correction car null pointer du au 1er un sunday non affiche a lecran
+
+       try {//bug du 01 09 2019 correction car null pointer du au 1er un sunday non affiche a lecran //todo
             Date a = main.selectedCase.getDateCase();
-            main.setSelectedDayInt(main.selectedCase.getDateCase());
+            main.setSelectedDayInt(main.selectedCase.getDateCase()); //todo inutile ? se lance 42 fois  -> à desactiver ?  // met à jour l'interface
             selDayCal.setTime((Date) a);
        }catch(Exception e){}
 
