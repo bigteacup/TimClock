@@ -34,6 +34,7 @@ Enregistrement {
 
             String fg = "ddd";
         } catch (Exception e) {
+
         }
         return dateb;
     }

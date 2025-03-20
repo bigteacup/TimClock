@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -19,15 +18,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -51,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     public TextInputEditText dateout;
     public TextInputEditText libelle;
     public CaseJour selectedCase;
-    public long  textInputSelected;
+    public ItemDbLinearLayout itemSelected;
     int selectedDay = 0;
     int selectedMonth = 0;
     int selectedYear = 0;
@@ -133,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     enregistrer(selectedYear, selectedMonth, selectedDay);
                 }
                 if (fabSaveButtonIsLocked == false && editMode == true){
-                    //todo enregistrer sur l'idDb correspondant à eventlistenner du textinput selectionné (recuperer le code dans "majjour" et "enregistrer"
+                    modifier(selectedYear, selectedMonth, selectedDay); //todo enregistrer sur l'idDb correspondant à eventlistenner du textinput selectionné (recuperer le code dans "majjour" et "enregistrer"
 
                 }
             }
@@ -209,6 +205,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
                     editMode = false;
+                    fabSaveButtonIsLocked=false;
+                    affichageFabButtons();
                 } else {
                 }
             }
@@ -242,6 +240,8 @@ public class MainActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus){
                     editMode = false;
+                    fabSaveButtonIsLocked=false;
+                    affichageFabButtons();
                 } else {
                 }
             }
@@ -305,23 +305,11 @@ public class MainActivity extends AppCompatActivity {
         return c;
     }
 
-    public String checkS(String a) {
-        int b = Integer.parseInt(a);
-        if (b >= 2400) {
-            a = "0000";
-        } else {
-            a = a;
-        }
-        return a;
-    }
-
 
     public long[] calculer(long entreeD, long sortieD, long pauseD, boolean useDbData) {
 
 
         long ecart;
-        Date dateZero = null;
-        long dureePause = 0;
         long tempsAvecPause = 0;
         long resultatSansPause = 0;
         long resultatAvecPause = 0;
@@ -379,14 +367,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            try {
-                String strDateZero = "0000";
-                //      dateZero = sdf.parse(parseDate(strDateZero));
-            } catch (Exception e) {
-            }
 
             ecart = (sortieDate.getTime() - entreDate.getTime());
-            //    System.out.println("Avant modif : " + ecart);
 
             if (sortieDate.before(entreDate)) {
                 GregorianCalendar calendar = new GregorianCalendar();
@@ -400,9 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
             Date refDate = srf.parse("0000"); // TODO inutile à suprimer après verif
             long pauseL = pauseDate.getTime() - refDate.getTime();
-            //       if(pauseL < 0){
-            //       pauseL = pauseL * -1;
-            //      }
+
 ///////////////////////////////////////////////////
 
             tempsAvecPause = ecart - pauseL;
@@ -416,12 +396,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            //     System.out.println("Apres Modif : " + resultatSansPause + " avec pause : " + resultatAvecPause);
-            //  pause
-
 
         } catch (Exception e) {
-            //    System.out.println("BUGGGGGGGGGGGGG");
 
         }
         long[] t = {resultatSansPause, resultatAvecPause, resultatDureePause};
@@ -532,7 +508,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void majJour(int year, int month, int dayOfMonth) { //// TODO: 17/03/2025    la sauvergarde de la donnée se fait ici
+    public void majJour(int year, int month, int dayOfMonth) { //// TODO: 17/03/2025    la sauvergarde de la donnée se fait ici                 à suprimer après refonte
         String strYear = String.valueOf(year);
         String strMonth = null;
         String strDay = null;
@@ -641,7 +617,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String dureeJour(Enregistrement enr) {
+    public String dureeJour(ArrayList<Enregistrement> listeEnregistrementsDuJour) { // todo à suprimer après refonte
+        long entree = 0;
+        long sortie = 0;
+        long pause = 0;
+        long[] t = null;
+        for(Enregistrement enr : listeEnregistrementsDuJour ){
+           t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
+            entree = entree + t[0];
+            sortie = sortie + t[1];
+            pause = pause + t[2];
+            t[0] = entree;
+            t[1] = sortie;
+            t[2] = pause;
+
+        }
+        long dureeJ = (((t[1]) * 60) * 1000);
+
+        String heures = Long.toString((dureeJ / 60 / 1000 / 60));
+        String minutes = Long.toString(((dureeJ / 1000 / 60) - (dureeJ / 1000 / 60 / 60) * 60));
+        if (minutes.length() < 2) {
+            minutes = "0" + minutes;
+        }
+        String a = (heures + ":" + minutes);
+
+
+        return a;
+    }
+
+    public String dureeJour(Enregistrement enr) { // todo à suprimer après refonte
         long[] t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
         long dureeJ = (((t[1]) * 60) * 1000);
 
@@ -667,8 +671,13 @@ public class MainActivity extends AppCompatActivity {
         for (Enregistrement l : liste) {
             Calendar c = Calendar.getInstance();
             c.setTime(l.getD());
-            //   c.get(Calendar.MONTH);
-            //c.add(Calendar.MONTH, 1);
+         /*   try{
+            } catch (Exception e1) {
+                datasource.open();
+                datasource.deleteEnregistrement(l); // suprimer automatiquement les incorrects
+                datasource.close();
+                break;
+            }*/
             int displayMonth;
             int displayYear;
             try {
@@ -707,10 +716,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void deleteJour(int year, int month, int dayOfMonth) {
-
-    }
-
 
     public void setSelectedDayInt(Date selectedDate) {    //values = datasource.getAllEnregistrements();
         Calendar c = Calendar.getInstance();
@@ -726,11 +731,11 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
 
 //// TODO: 17/03/2025
-            for (Enregistrement e : enr) {
-                ItemDbLinearLayout item = new ItemDbLinearLayout(this, this, e.getId());
-                item.setModifierEntree(e.getIn());
-                item.setModifierSortie(e.getOut());
-                item.setModifierPause(e.getPause());
+            for (Enregistrement enregistrement : enr) {
+                ItemDbLinearLayout item = new ItemDbLinearLayout(this, this, enregistrement);
+                item.setModifierEntree(enregistrement.getIn());
+                item.setModifierSortie(enregistrement.getOut());
+                item.setModifierPause(enregistrement.getPause());
                 donneesDuJour.addView(item);
             }
 
@@ -759,7 +764,7 @@ public class MainActivity extends AppCompatActivity {
         String strMonth = null;
         String strDay = null;
 
-        boolean trouve = false;
+
         String date = "";
         long keyIn = 0;
         long keyOut = 0;
@@ -807,49 +812,86 @@ public class MainActivity extends AppCompatActivity {
                 entree.getText().clear();
                 sortie.getText().clear();
                 setSelectedDayInt(selectedCase.getDateCase()); //maj
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+                entree.requestFocus();
+                entree.selectAll();
             }
         }
     }
 
-    public void modifier(Enregistrement enregistrement) {//todo à lier avec l'id de l'enregistrement
-        if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
+    public void modifier(int year, int month, int dayOfMonth) {//todo à lier avec l'id de l'enregistrement
+        if (itemSelected.getModifierEntree().length() > 0 || itemSelected.getModifierSortie().length() > 0 || itemSelected.getModifierPause().length() > 0) {
            // majJour(selectedYear, selectedMonth, selectedDay);
+
+            String strYear = String.valueOf(year);
+            String strMonth = null;
+            String strDay = null;
+
+
+            String date = "";
+            long keyIn = 0;
+            long keyOut = 0;
+            long keyPause = 0;
+
+            if (month < 10) {
+                strMonth = "0" + String.valueOf(month);
+            } else {
+                strMonth = String.valueOf(month);
+            }
+            if (dayOfMonth < 10) {
+                strDay = "0" + String.valueOf(dayOfMonth);
+            } else {
+                strDay = String.valueOf(dayOfMonth);
+            }
+            date = "'" + strDay + strMonth + strYear + "'";
+
             datasource.open();
-            datasource.deleteEnregistrement(enrTrouve);
+            datasource.deleteEnregistrement(itemSelected.enregistrement);
             values = datasource.getAllEnregistrements();
             datasource.close();
             try {
-                keyIn = Long.parseLong(entree.getText().toString());
+                keyIn = Long.parseLong(itemSelected.getModifierEntree());
             } catch (Exception e1) {
 
             }
             try {
-                keyOut = Long.parseLong(sortie.getText().toString());
+                keyOut = Long.parseLong(itemSelected.getModifierSortie());
             } catch (Exception e1) {
 
             }
             try {
-                keyPause = Long.parseLong(pause.getText().toString());
+                keyPause = Long.parseLong(itemSelected.getModifierPause());
             } catch (Exception e1) {
 
             }
             if (keyIn + keyOut + keyPause > 0) {
 
                 datasource.open();
-                Enregistrement enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
+                itemSelected.enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
                 values = datasource.getAllEnregistrements();
                 datasource.close();
 
                 caltim.majCase(ga.getPosition(selectedCase));
                 majTotalMois();
+                setSelectedDayInt(selectedCase.getDateCase());
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+                entree.requestFocus();
+                entree.selectAll();
             } else {
 
                 caltim.majCase(ga.getPosition(selectedCase));
+                setSelectedDayInt(selectedCase.getDateCase());
                 majTotalMois();
                 //majSelectedCase
                // ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
                 //lireEnregistrementsDuJour();
-                //majcase;
+               // majCase();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
+                entree.requestFocus();
+                entree.selectAll();
             }
         }
     }

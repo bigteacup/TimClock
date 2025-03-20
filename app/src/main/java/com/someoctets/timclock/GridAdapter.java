@@ -54,7 +54,7 @@ public class GridAdapter extends ArrayAdapter {
 
        try {//bug du 01 09 2019 correction car null pointer du au 1er un sunday non affiche a lecran //todo
             Date a = main.selectedCase.getDateCase();
-            main.setSelectedDayInt(main.selectedCase.getDateCase()); //todo inutile ? se lance 42 fois  -> à desactiver ?  // met à jour l'interface
+         //   main.setSelectedDayInt(main.selectedCase.getDateCase()); //todo inutile ? se lance 42 fois  -> à desactiver ?  // met à jour l'interface
             selDayCal.setTime((Date) a);
        }catch(Exception e){}
 
@@ -199,7 +199,8 @@ public class GridAdapter extends ArrayAdapter {
                 }
 */
                 try {
-                    enrIndicator.setText(String.valueOf(main.dureeJour(listeEnregistrements.get(i))));
+                //    enrIndicator.setText(String.valueOf(main.dureeJour(listeEnregistrements.get(i))));
+                    enrIndicator.setText(String.valueOf(main.dureeJour(main.lireEnregistrementsDuJour(main.composerStringDate(enrCalendar.get(Calendar.YEAR), enrCalendar.get(Calendar.MONTH)+1, enrCalendar.get(Calendar.DAY_OF_MONTH))))));
                 } catch (Exception e) {
 
                 }

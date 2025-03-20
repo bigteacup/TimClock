@@ -97,8 +97,8 @@ public class EnregistrementDataSource {
     }
 
 
-    public void deleteEnregistrement(Enregistrement date) {
-        long id = date.getId();
+    public void deleteEnregistrement(Enregistrement enregistrement) {
+        long id = enregistrement.getId();
         System.out.println("Enregistrement deleted with id: " + id);
 
         database.delete(DBOpenHelper.TABLE_HEURES_DE_TRAVAIL, DBOpenHelper.COLUMN_ID + " = " + id, null);

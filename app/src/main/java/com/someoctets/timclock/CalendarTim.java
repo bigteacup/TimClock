@@ -133,7 +133,7 @@ public class CalendarTim extends LinearLayout {
                 main.entree.requestFocus();
                 InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(main.entree, InputMethodManager.SHOW_IMPLICIT);
-                main.resetFab();
+               // main.resetFab();
              //   main.affichageFabLock();
                 main.entree.selectAll();
                 //// TODO: 17/03/2025   controler ici
@@ -196,7 +196,7 @@ public void majSelectedCase(CaseJour cs) {
             main.entree.requestFocus();
             InputMethodManager imm = (InputMethodManager) main.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(main.entree, InputMethodManager.SHOW_IMPLICIT);
-            main.resetFab();
+           // main.resetFab();
            // main.affichageFabLock();
             main.entree.selectAll();
 
