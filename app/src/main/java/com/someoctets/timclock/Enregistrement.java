@@ -9,10 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class
-
-
-Enregistrement {
+public class Enregistrement implements Cloneable {
     private long id;
     private String date;
     private Date d;
@@ -91,4 +88,15 @@ Enregistrement {
     public String toString() {
         return date;
     }
+
+
+    @Override
+    public Enregistrement clone() {
+        try {
+            return (Enregistrement) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
 }

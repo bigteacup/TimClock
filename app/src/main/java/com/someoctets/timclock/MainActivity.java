@@ -29,8 +29,11 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -128,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 if (fabSaveButtonIsLocked == false && editMode == false) {
                     enregistrer(selectedYear, selectedMonth, selectedDay);
                 }
-                if (fabSaveButtonIsLocked == false && editMode == true){
+                if (fabSaveButtonIsLocked == false && editMode == true) {
                     modifier(selectedYear, selectedMonth, selectedDay); //todo enregistrer sur l'idDb correspondant à eventlistenner du textinput selectionné (recuperer le code dans "majjour" et "enregistrer"
 
                 }
@@ -153,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
             @Override
             public void afterTextChanged(Editable s) {
                 try {
@@ -170,9 +172,9 @@ public class MainActivity extends AppCompatActivity {
         entree.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     editMode = false;
-                    fabSaveButtonIsLocked=false;
+                    fabSaveButtonIsLocked = false;
                     affichageFabButtons();
                 } else {
                 }
@@ -203,9 +205,9 @@ public class MainActivity extends AppCompatActivity {
         sortie.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     editMode = false;
-                    fabSaveButtonIsLocked=false;
+                    fabSaveButtonIsLocked = false;
                     affichageFabButtons();
                 } else {
                 }
@@ -238,9 +240,9 @@ public class MainActivity extends AppCompatActivity {
         pause.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus){
+                if (hasFocus) {
                     editMode = false;
-                    fabSaveButtonIsLocked=false;
+                    fabSaveButtonIsLocked = false;
                     affichageFabButtons();
                 } else {
                 }
@@ -367,7 +369,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
             ecart = (sortieDate.getTime() - entreDate.getTime());
 
             if (sortieDate.before(entreDate)) {
@@ -394,7 +395,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultatAvecPause < 0) {
                 resultatAvecPause = 0;
             }
-
 
 
         } catch (Exception e) {
@@ -622,8 +622,8 @@ public class MainActivity extends AppCompatActivity {
         long sortie = 0;
         long pause = 0;
         long[] t = null;
-        for(Enregistrement enr : listeEnregistrementsDuJour ){
-           t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
+        for (Enregistrement enr : listeEnregistrementsDuJour) {
+            t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
             entree = entree + t[0];
             sortie = sortie + t[1];
             pause = pause + t[2];
@@ -720,7 +720,7 @@ public class MainActivity extends AppCompatActivity {
     public void setSelectedDayInt(Date selectedDate) {    //values = datasource.getAllEnregistrements();
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);
-
+        //ArrayList<Enregistrement> listeDes = null;
         selectedDay = c.get(Calendar.DAY_OF_MONTH);
         selectedMonth = (c.get(Calendar.MONTH) + 1);
         selectedYear = c.get(Calendar.YEAR);
@@ -729,13 +729,14 @@ public class MainActivity extends AppCompatActivity {
         donneesDuJour.removeAllViews();
         try {
             ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
-
+            trierItem(enr);
 //// TODO: 17/03/2025
             for (Enregistrement enregistrement : enr) {
                 ItemDbLinearLayout item = new ItemDbLinearLayout(this, this, enregistrement);
                 item.setModifierEntree(enregistrement.getIn());
                 item.setModifierSortie(enregistrement.getOut());
                 item.setModifierPause(enregistrement.getPause());
+
                 donneesDuJour.addView(item);
             }
 
@@ -744,6 +745,52 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+    public void trierItem(ArrayList<Enregistrement> listeEnregistrement) {
+        ArrayList<Enregistrement>deepList = new ArrayList<>();
+        for(Enregistrement e : listeEnregistrement){
+            deepList.add(e.clone());
+        }
+        Iterator<Enregistrement> it = deepList.iterator();
+        it = deepList.iterator();//maj
+        ArrayList<Enregistrement> listeTriee = new ArrayList<>();
+
+        long lePlusPetit;
+
+        Enregistrement enr;
+        Enregistrement postulant = new Enregistrement();
+
+            long testA;
+            long testB;
+            for(Enregistrement e : listeEnregistrement) {
+             testA = e.getIn();
+
+                while (it.hasNext())  {
+                    enr = it.next();
+         //   for (Enregistrement e2 : listeEnregistrement) {
+                testB = enr.getIn();
+
+
+                if (testA < testB) {
+                    lePlusPetit = testA;
+                    postulant = e;
+                    it.remove();
+                }
+
+
+         //   }
+
+
+
+
+        }
+                listeTriee.add(postulant);
+        }
+
+
+        int t = 0;
+            }
 
 
 
@@ -822,7 +869,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void modifier(int year, int month, int dayOfMonth) {//todo à lier avec l'id de l'enregistrement
         if (itemSelected.getModifierEntree().length() > 0 || itemSelected.getModifierSortie().length() > 0 || itemSelected.getModifierPause().length() > 0) {
-           // majJour(selectedYear, selectedMonth, selectedDay);
+            // majJour(selectedYear, selectedMonth, selectedDay);
 
             String strYear = String.valueOf(year);
             String strMonth = null;
@@ -885,9 +932,9 @@ public class MainActivity extends AppCompatActivity {
                 setSelectedDayInt(selectedCase.getDateCase());
                 majTotalMois();
                 //majSelectedCase
-               // ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
+                // ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
                 //lireEnregistrementsDuJour();
-               // majCase();
+                // majCase();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
                 entree.requestFocus();
@@ -895,19 +942,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-public void switcherFabSaveButtonIsLocked(){
-    if (fabSaveButtonIsLocked) {
-        fabSaveButtonIsLocked = false;
-    } else {
-        fabSaveButtonIsLocked = true;
-    }
-    affichageFabButtons();
-}
 
-public void affichageFabButtons(){ //met à jour l'affichage des deux bouttons fab fabSave et fabUnlock
-    affichageFabSaveButton();
-    affichageFabUnlockButton();
-}
+    public void switcherFabSaveButtonIsLocked() {
+        if (fabSaveButtonIsLocked) {
+            fabSaveButtonIsLocked = false;
+        } else {
+            fabSaveButtonIsLocked = true;
+        }
+        affichageFabButtons();
+    }
+
+    public void affichageFabButtons() { //met à jour l'affichage des deux bouttons fab fabSave et fabUnlock
+        affichageFabSaveButton();
+        affichageFabUnlockButton();
+    }
 
     public void affichageFabUnlockButton() {
         if (fabSaveButtonIsLocked == false) {
@@ -926,6 +974,7 @@ public void affichageFabButtons(){ //met à jour l'affichage des deux bouttons f
             fabUnlockButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#24abd8"))); //bleu
         }
     }
+
     public void affichageFabSaveButton() {
 
         if (fabSaveButtonIsLocked == false) {
