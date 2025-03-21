@@ -766,16 +766,16 @@ public class MainActivity extends AppCompatActivity {
             for(Enregistrement e : listeEnregistrement) {
              testA = e.getIn();
 
-                while (it.hasNext())  {
-                    enr = it.next();
-         //   for (Enregistrement e2 : listeEnregistrement) {
-                testB = enr.getIn();
+              //  while (it.hasNext())  {
+               //     enr = it.next();
+           for (Enregistrement e2 : listeEnregistrement) {
+                testB = e2.getIn();
 
 
-                if (testA < testB) {
+                if (testA < testB && e.getId()!=e2.getId()) {
                     lePlusPetit = testA;
                     postulant = e;
-                    it.remove();
+                   // it.remove();
                 }
 
 
