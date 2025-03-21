@@ -763,8 +763,10 @@ public class MainActivity extends AppCompatActivity {
 
             long testA;
             long testB;
+            boolean trouve = false;
             for(Enregistrement e : listeEnregistrement) {
              testA = e.getIn();
+                trouve=false;
 
               //  while (it.hasNext())  {
                //     enr = it.next();
@@ -775,6 +777,7 @@ public class MainActivity extends AppCompatActivity {
                 if (testA < testB && e.getId()!=e2.getId()) {
                     lePlusPetit = testA;
                     postulant = e;
+                    trouve=true;
                    // it.remove();
                 }
 
@@ -785,7 +788,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+                if(trouve=true){
                 listeTriee.add(postulant);
+                }
         }
 
 
