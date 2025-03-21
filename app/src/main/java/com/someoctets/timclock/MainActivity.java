@@ -754,7 +754,7 @@ public class MainActivity extends AppCompatActivity {
         }
         Iterator<Enregistrement> it = deepList.iterator();
         it = deepList.iterator();//maj
-        *\
+        */
         ArrayList<Enregistrement> listeTriee = new ArrayList<>();
 
         long lePlusPetit;
