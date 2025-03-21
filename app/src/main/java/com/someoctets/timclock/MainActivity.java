@@ -765,6 +765,7 @@ public class MainActivity extends AppCompatActivity {
             long testA;
             long testB;
             boolean trouve = false;
+        while(listeEnregistrement.size()!=listeTriee.size()){
             for(Enregistrement e : listeEnregistrement) {
              testA = e.getIn();
                 trouve=false;
@@ -793,7 +794,7 @@ public class MainActivity extends AppCompatActivity {
                 listeTriee.add(postulant);
                 }
         }
-
+        }
 
         int t = 0;
             }
