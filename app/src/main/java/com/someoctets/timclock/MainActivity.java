@@ -748,12 +748,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void trierItem(ArrayList<Enregistrement> listeEnregistrement) {
-        ArrayList<Enregistrement>deepList = new ArrayList<>();
+      /*  ArrayList<Enregistrement>deepList = new ArrayList<>();
         for(Enregistrement e : listeEnregistrement){
             deepList.add(e.clone());
         }
         Iterator<Enregistrement> it = deepList.iterator();
         it = deepList.iterator();//maj
+        *\
         ArrayList<Enregistrement> listeTriee = new ArrayList<>();
 
         long lePlusPetit;
