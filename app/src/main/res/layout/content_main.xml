@@ -119,11 +119,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/deltaTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="text" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -141,7 +136,12 @@
                 android:id="@+id/donneesDuJour"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:layout_gravity="top"
+                android:gravity="top"
+                android:isScrollContainer="false"
+                android:orientation="vertical"
+                android:scrollbarAlwaysDrawHorizontalTrack="false"
+                android:scrollbarAlwaysDrawVerticalTrack="false"></LinearLayout>
 
         </LinearLayout>
     </ScrollView>

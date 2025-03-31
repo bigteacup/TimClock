@@ -2,17 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/itemdb"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/modifierEntree"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/heurein"
             android:inputType="number"
             android:maxLength="5"
@@ -26,13 +27,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/modifierSortie"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/heureout"
             android:inputType="number"
             android:maxLength="4"
@@ -47,13 +48,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_weight="1.3">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/modifierPause"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:hint="@string/pause"
             android:inputType="number"
             android:maxLength="4"
@@ -62,6 +63,15 @@
             android:nextFocusDown="@id/fabSaveButton"
             android:selectAllOnFocus="true"
             android:textSize="12sp" />
+
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/deltaTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingLeft="15sp"
+        android:text="Pause" />
 
 </LinearLayout>

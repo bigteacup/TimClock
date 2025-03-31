@@ -29,11 +29,8 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -296,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public boolean check(String a) {
+    public boolean check(String a) { // on verfie si la saisie n'est pas supérieure aux 24 heures d'une journée
         Boolean c = false;
         int b = Integer.parseInt(a);
         if (b >= 2400) {
@@ -308,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public long[] calculer(long entreeD, long sortieD, long pauseD, boolean useDbData) {
+    public long[] calculer(long entreeD, long sortieD, long pauseD, boolean useDbData) { // on calcule la durée d'une seule entrée/enregistrement et on renvoi un tableau /sansPause/avecPause/duréePause
 
 
         long ecart;
@@ -428,7 +425,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String parseDate(String date) {
+    public String parseDate(String date) { // on formate un String de manière à ce qu'il comporte toujours 4 chiffres et on remplace le vide par zero
         if (date.length() == 1) {
             date = "000" + date;
         }
@@ -445,7 +442,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Enregistrement> lireJour(int year, int month, int dayOfMonth) {
+    public ArrayList<Enregistrement> lireJour(int year, int month, int dayOfMonth) { // on formate une date en String ddMMYYYY et on renvoie les enregistrements de cette date
         String strYear = String.valueOf(year);
         String strMonth = null;
 
@@ -470,7 +467,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public String composerStringDate(int year, int month, int dayOfMonth) {
+    public String composerStringDate(int year, int month, int dayOfMonth) { // on formate le une date sous forme de String  01012025  ddMMYYYY
         String strYear = String.valueOf(year);
         String strMonth = null;
 
@@ -495,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Enregistrement> lireEnregistrementsDuJour(String keyDate) {
+    public ArrayList<Enregistrement> lireEnregistrementsDuJour(String keyDate) { // on fait une liste des enregistrement de la journée
         ArrayList<Enregistrement> listeEnr = new ArrayList<>();
         for (Enregistrement e : values) { //todo maintenir values à jour : values = datasource.getAllEnregistrements();
             if (e.getDate().equals(keyDate)) {
@@ -508,128 +505,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void majJour(int year, int month, int dayOfMonth) { //// TODO: 17/03/2025    la sauvergarde de la donnée se fait ici                 à suprimer après refonte
-        String strYear = String.valueOf(year);
-        String strMonth = null;
-        String strDay = null;
-
-        boolean trouve = false;
-        String date = "";
-        Enregistrement enrTrouve = null;
-
-        long keyIn = 0;
-        long keyOut = 0;
-        long keyPause = 0;
-
-
-        if (month < 10) {
-            strMonth = "0" + String.valueOf(month);
-        } else {
-            strMonth = String.valueOf(month);
-        }
-        if (dayOfMonth < 10) {
-            strDay = "0" + String.valueOf(dayOfMonth);
-        } else {
-            strDay = String.valueOf(dayOfMonth);
-        }
-        date = "'" + strDay + strMonth + strYear + "'";
-
-
-        for (Enregistrement enr : values) {
-            //      datasource.deleteEnregistrement(enr);
-
-            if (date.equals(enr.getDate())) {
-                System.out.println("date deja presente : " + enr.getId() + " " + enr.getDate() + " " + enr.getIn() + " " + enr.getOut() + " " + enr.getPause());
-                trouve = true;
-                enrTrouve = enr;
-                break;
-            }
-        }
-        if (trouve == true) {
-            if (editMode == true) {
-                datasource.open();
-                datasource.deleteEnregistrement(enrTrouve);
-                values = datasource.getAllEnregistrements();
-                datasource.close();
-                try {
-                    keyIn = Long.parseLong(entree.getText().toString());
-                } catch (Exception e1) {
-
-                }
-                try {
-                    keyOut = Long.parseLong(sortie.getText().toString());
-                } catch (Exception e1) {
-
-                }
-                try {
-                    keyPause = Long.parseLong(pause.getText().toString());
-                } catch (Exception e1) {
-
-                }
-                if (keyIn + keyOut + keyPause > 0) {
-
-                    datasource.open();
-                    Enregistrement enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
-                    values = datasource.getAllEnregistrements();
-                    datasource.close();
-
-                    caltim.majCase(ga.getPosition(selectedCase));
-                    majTotalMois();
-                } else {
-
-                    caltim.majCase(ga.getPosition(selectedCase));
-                    majTotalMois();
-                }
-
-            }
-
-        } else {
-            try {
-                keyIn = Long.parseLong(entree.getText().toString());
-            } catch (Exception e1) {
-
-            }
-            try {
-                keyOut = Long.parseLong(sortie.getText().toString());
-            } catch (Exception e1) {
-
-            }
-            try {
-                keyPause = Long.parseLong(pause.getText().toString());
-            } catch (Exception e1) {
-
-            }
-            if (keyIn + keyOut + keyPause > 0) {
-                datasource.open();
-                Enregistrement enregistrement = datasource.createEnregistrement(date, keyIn, keyOut, keyPause);
-                values = datasource.getAllEnregistrements();
-                datasource.close();
-                caltim.majCase(ga.getPosition(selectedCase));
-                majTotalMois();
-            }
-        }
-
-
-        if (trouve == true) {
-        }
-
-
-    }
-
-
-    public String dureeJour(ArrayList<Enregistrement> listeEnregistrementsDuJour) { // todo à suprimer après refonte
-        long entree = 0;
-        long sortie = 0;
-        long pause = 0;
+    public String dureeJour(ArrayList<Enregistrement> listeEnregistrementsDuJour) { // on calcule le resultat total d'une journée à l'aide de l'ensemble de ses entrées.
+        long resultatSansPause = 0;
+        long resultatAvecPause = 0;
+        long resultatDureePause = 0;
         long[] t = null;
         for (Enregistrement enr : listeEnregistrementsDuJour) {
             t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
-            entree = entree + t[0];
-            sortie = sortie + t[1];
-            pause = pause + t[2];
-            t[0] = entree;
-            t[1] = sortie;
-            t[2] = pause;
+            resultatSansPause = resultatSansPause + t[0];
+            resultatAvecPause = resultatAvecPause + t[1];
+            resultatDureePause = resultatDureePause + t[2];
+            t[0] = resultatSansPause;
+            t[1] = resultatAvecPause;
+            t[2] = resultatDureePause;
 
         }
         long dureeJ = (((t[1]) * 60) * 1000);
@@ -645,30 +533,62 @@ public class MainActivity extends AppCompatActivity {
         return a;
     }
 
-    public String dureeJour(Enregistrement enr) { // todo à suprimer après refonte
-        long[] t = calculer(enr.getIn(), enr.getOut(), enr.getPause(), true);
-        long dureeJ = (((t[1]) * 60) * 1000);
+    public String dureeEcart(long a, long b) { // calcule la durée entre deux plages horaires afin de determinuer le temps de pause
+        long ecart = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
 
-        String heures = Long.toString((dureeJ / 60 / 1000 / 60));
-        String minutes = Long.toString(((dureeJ / 1000 / 60) - (dureeJ / 1000 / 60 / 60) * 60));
+        Date entreDate = null;
+        Date sortieDate = null;
+        Date pauseDate = null;
+        try {
+            String strEntreD = Long.toString(a);
+            entreDate = sdf.parse(parseDate(strEntreD));
+        } catch (Exception e) {
+        }
+        try {
+            String strSortieD = Long.toString(b);
+            sortieDate = sdf.parse(parseDate(strSortieD));
+        } catch (Exception e) {
+        }
+
+        ecart = (sortieDate.getTime() - entreDate.getTime());
+
+
+
+
+
+        long dureeJ = (((ecart) / 60) / 1000);
+
+        String heures = Long.toString((dureeJ / 60 ));
+        if(a > b && heures.contentEquals("0")){ // si la saisie de la reprise du travail est avant le dernier arret et que le signe négatif n'est pas présent. noter le resultat en négatif pour signaler l'incohérence
+            heures = "-" + heures;
+        }
+
+
+        String minutes = Long.toString(dureeJ - ((dureeJ/60) *60));
+        if (minutes.contains("-")) {
+            minutes = minutes.replace("-", "");
+        }
         if (minutes.length() < 2) {
             minutes = "0" + minutes;
         }
-        String a = (heures + ":" + minutes);
+        String r = (heures + ":" + minutes);
 
 
-        return a;
+
+
+        return r;
     }
 
 
-    public void majTotalMois() {
+    public void majTotalMois() { // on calcule le total travaillé dans le mois  en prenant chaque enregistrement et en l'additionnant
 
         ArrayList<Enregistrement> liste = values;
 
         long totalMois = 0;
         long[] t;
 
-        for (Enregistrement l : liste) {
+        for (Enregistrement l : liste) { //on parcour la liste des enregistrements
             Calendar c = Calendar.getInstance();
             c.setTime(l.getD());
          /*   try{
@@ -684,8 +604,8 @@ public class MainActivity extends AppCompatActivity {
                 displayMonth = caltim.cal.get(Calendar.MONTH);
                 displayYear = caltim.cal.get(Calendar.YEAR);
                 if (c.get(Calendar.MONTH) == displayMonth && c.get(Calendar.YEAR) == displayYear) {
-                    t = calculer(l.getIn(), l.getOut(), l.getPause(), true);
-                    totalMois = totalMois + (((t[1]) * 60) * 1000);
+                    t = calculer(l.getIn(), l.getOut(), l.getPause(), true); // on calcule la durée de l'entrée concernée
+                    totalMois = totalMois + (((t[1]) * 60) * 1000); // on additionne au total du mois celui de l'entrée en cours
                 } else {
 
                 }
@@ -702,7 +622,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        try {
+        try { // on formate le tout et on l'affiche
             String minutesString = "";
             if (((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60) < 10) {
                 minutesString = "0" + Long.toString(((totalMois / 1000 / 60) - (totalMois / 1000 / 60 / 60) * 60));
@@ -717,7 +637,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setSelectedDayInt(Date selectedDate) {    //values = datasource.getAllEnregistrements();
+    public void setSelectedDayInt(Date selectedDate) {  //on selectionne le jour actif et on met à l'écran ses données triées chronologiquement et on calcule les écarts entre les plages.
+        //values = datasource.getAllEnregistrements();
         Calendar c = Calendar.getInstance();
         c.setTime(selectedDate);
         //ArrayList<Enregistrement> listeDes = null;
@@ -730,13 +651,24 @@ public class MainActivity extends AppCompatActivity {
         try {
             ArrayList<Enregistrement> enr = lireJour(selectedYear, selectedMonth, selectedDay);
             trierItem(enr);
+        //    calculerEcarts(enr); //todo ? sortir la fonction ci dessous ?
 //// TODO: 17/03/2025
+
+             String ecart = "";
+             long memoire=-1;
             for (Enregistrement enregistrement : enr) {
                 ItemDbLinearLayout item = new ItemDbLinearLayout(this, this, enregistrement);
                 item.setModifierEntree(enregistrement.getIn());
                 item.setModifierSortie(enregistrement.getOut());
                 item.setModifierPause(enregistrement.getPause());
+                if(memoire > -1) {
+                    ecart = dureeEcart(memoire,enregistrement.getIn());
+                    TextView deltaTextView = findViewById(R.id.deltaTextView);
+                    item.setDeltaTextView(ecart);
+                }
 
+
+                memoire = enregistrement.getOut();
                 donneesDuJour.addView(item);
             }
 
@@ -747,72 +679,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void trierItem(ArrayList<Enregistrement> listeEnregistrement) {
-      /*  ArrayList<Enregistrement>deepList = new ArrayList<>();
-        for(Enregistrement e : listeEnregistrement){
-            deepList.add(e.clone());
-        }
-        Iterator<Enregistrement> it = deepList.iterator();
-        it = deepList.iterator();//maj
-        */
-        ArrayList<Enregistrement> listeTriee = new ArrayList<>();
+    public void trierItem(ArrayList<Enregistrement> listeEnregistrements) { // On tri la liste des enregistrements chronologiquement
+        Enregistrement memoire;
+        for (int i = 0; i < listeEnregistrements.size()-1 ; i++) {
+            for (int j = i+1; j  < listeEnregistrements.size(); j++) {
+                if (listeEnregistrements.get(i).getIn() > listeEnregistrements.get(j).getIn()) {
+                    memoire = listeEnregistrements.get(i);
+                    listeEnregistrements.set(i, listeEnregistrements.get(j));
+                    listeEnregistrements.set(j, memoire);
 
-        long lePlusPetit;
-
-        Enregistrement enr;
-        Enregistrement postulant = new Enregistrement();
-
-            long testA;
-            long testB;
-            boolean trouve = false;
-        while(listeEnregistrement.size()!=listeTriee.size()){
-            for(Enregistrement e : listeEnregistrement) {
-             testA = e.getIn();
-                trouve=false;
-
-              //  while (it.hasNext())  {
-               //     enr = it.next();
-           for (Enregistrement e2 : listeEnregistrement) {
-                testB = e2.getIn();
-
-
-                if (testA < testB && e.getId()!=e2.getId()) {
-                    lePlusPetit = testA;
-                    postulant = e;
-                    trouve=true;
-                   // it.remove();
                 }
-
-
-         //   }
-
-
-
-
-        }
-                if(trouve=true){
-                listeTriee.add(postulant);
-                }
-        }
-        }
-
-        int t = 0;
             }
 
+        }
+        int i = 0;
+    }
+    public void calculerEcarts(ArrayList<Enregistrement> listeEnregistrements){ // todo à develloper ?
+        for(Enregistrement enr : listeEnregistrements){
+            enr.getOut();
 
+        }
 
-
-
-    public void resetFab() { //todo à supprimer après refonte
-        fabOrange = false;
-        editMode = false;
-        pause.setTextColor(Color.BLACK);
-        entree.setTextColor(Color.BLACK);
-        sortie.setTextColor(Color.BLACK);
     }
 
 
-    public void enregistrer(int year, int month, int dayOfMonth) { //todo
+    public void enregistrer(int year, int month, int dayOfMonth) { // on enregistre une nouvelle plage en base de donnée
 
         String strYear = String.valueOf(year);
         String strMonth = null;
@@ -874,7 +765,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void modifier(int year, int month, int dayOfMonth) {//todo à lier avec l'id de l'enregistrement
+    public void modifier(int year, int month, int dayOfMonth) { // on suprimme et remplace un enregistrement, bref on edite/met à jour l'enregistrement.
+        //todo à lier avec l'id de l'enregistrement
         if (itemSelected.getModifierEntree().length() > 0 || itemSelected.getModifierSortie().length() > 0 || itemSelected.getModifierPause().length() > 0) {
             // majJour(selectedYear, selectedMonth, selectedDay);
 
@@ -1004,97 +896,6 @@ public class MainActivity extends AppCompatActivity {
                 fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
             }
         }
-    }
-
-    public void switcherFabLock() { //todo a suprimer apres refonte ?
-
-        boolean lockFab = false;
-        String s = composerStringDate(selectedYear, selectedMonth, selectedDay);
-        for (Enregistrement enr : values) {
-            if (enr.getDate().equals(s)) {
-                lockFab = true;
-                break;
-            }
-        }
-
-
-        if (lockFab == true && fabOrange == false && editMode == false) { // && editMode == true && fabOrange == false
-
-            //fabOrange = false;
-            editMode = true;
-            fabOrange = true;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp, fabSaveButton.getContext().getTheme()));
-            } else {
-                fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_open_black_24dp));
-            }
-            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F57449"))); //F57449 //orange
-            pause.setTextColor(Color.BLACK);
-            entree.setTextColor(Color.BLACK);
-            sortie.setTextColor(Color.BLACK);
-
-
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
-            entree.requestFocus();
-            entree.selectAll();
-
-
-        } else if (editMode == true && lockFab == true && fabOrange == true) {
-            fabOrange = false;
-            fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
-            if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-                majJour(selectedYear, selectedMonth, selectedDay);
-                editMode = false;
-            }
-            if (lireJour(selectedYear, selectedMonth, selectedDay) != null) {
-                pause.setTextColor(Color.GRAY);
-                entree.setTextColor(Color.GRAY);
-                sortie.setTextColor(Color.GRAY);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabSaveButton.getContext().getTheme()));
-                } else {
-                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                }
-            } else {
-                fabOrange = false;
-
-                pause.getText().clear();
-                entree.getText().clear();
-                sortie.getText().clear();
-                //  affichageFabLock();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(entree, InputMethodManager.SHOW_IMPLICIT);
-                entree.requestFocus();
-                entree.selectAll();
-
-            }
-
-
-        } else if (lockFab == false) {
-            if (entree.getText().toString().length() > 0 || sortie.getText().toString().length() > 0 || pause.getText().toString().length() > 0) {
-                majJour(selectedYear, selectedMonth, selectedDay);
-                fabSaveButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY)); //  #24abd8 //ff33b5e5
-                pause.setTextColor(Color.GRAY);
-                entree.setTextColor(Color.GRAY);
-                sortie.setTextColor(Color.GRAY);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp, fabSaveButton.getContext().getTheme()));
-                } else {
-                    fabSaveButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_outline_black_24dp));
-                }
-            } else {
-                pause.setTextColor(Color.BLACK);
-                entree.setTextColor(Color.BLACK);
-                sortie.setTextColor(Color.BLACK);
-            }
-
-
-        }
-
-
     }
 
     public void setSharedPreferences(SharedPreferences sharedPreferences) {

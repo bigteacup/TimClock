@@ -16,6 +16,7 @@ public class ItemDbLinearLayout extends LinearLayout  {
 private TextView modifierEntree;
 private TextView modifierSortie;
 private TextView modifierPause;
+private TextView deltaTextView;
 private Context context;
 MainActivity main;
 public Enregistrement enregistrement;
@@ -42,6 +43,7 @@ public Enregistrement enregistrement;
         modifierEntree = view.findViewById(R.id.modifierEntree);
         modifierSortie = view.findViewById(R.id.modifierSortie);
         modifierPause = view.findViewById(R.id.modifierPause);
+        deltaTextView = view.findViewById(R.id.deltaTextView);
         //LinearLayout itemdb =  view.findViewById(R.id.itemdb);
 
         modifierEntree.addTextChangedListener(new TextWatcher() {
@@ -169,6 +171,9 @@ public Enregistrement enregistrement;
         this.modifierPause.setText(String.valueOf(i));
     }
 
+    public void setDeltaTextView(String i){
+        this.deltaTextView.setText(String.valueOf(i));
+    }
 
 
     public String getModifierEntree(){
@@ -180,6 +185,7 @@ public Enregistrement enregistrement;
     public String getModifierPause(){
         return this.modifierPause.getText().toString();
     }
+
 
 
 }
