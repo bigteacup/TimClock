@@ -492,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public ArrayList<Enregistrement> lireEnregistrementsDuJour(String keyDate) { // on fait une liste des enregistrement de la journée
+    public ArrayList<Enregistrement> lireEnregistrementsDuJour(String keyDate) { // on fait une liste des enregistrements de la journée
         ArrayList<Enregistrement> listeEnr = new ArrayList<>();
         for (Enregistrement e : values) { //todo maintenir values à jour : values = datasource.getAllEnregistrements();
             if (e.getDate().equals(keyDate)) {
@@ -533,7 +533,7 @@ public class MainActivity extends AppCompatActivity {
         return a;
     }
 
-    public String dureeEcart(long a, long b) { // calcule la durée entre deux plages horaires afin de determinuer le temps de pause
+    public String dureeEcart(long a, long b) { // calcule la durée entre deux plages horaires afin de determiner le temps de pause
         long ecart = 0;
         SimpleDateFormat sdf = new SimpleDateFormat("HHmm");
 
@@ -765,7 +765,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void modifier(int year, int month, int dayOfMonth) { // on suprimme et remplace un enregistrement, bref on edite/met à jour l'enregistrement.
+    public void modifier(int year, int month, int dayOfMonth) { // on suprime et remplace un enregistrement, bref on edite/met à jour l'enregistrement.
         //todo à lier avec l'id de l'enregistrement
         if (itemSelected.getModifierEntree().length() > 0 || itemSelected.getModifierSortie().length() > 0 || itemSelected.getModifierPause().length() > 0) {
             // majJour(selectedYear, selectedMonth, selectedDay);
